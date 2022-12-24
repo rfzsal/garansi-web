@@ -16,21 +16,6 @@ import Pencil from 'mdi-material-ui/Pencil'
 import EnhancedTableHead from './EnhancedTableHead'
 import EnhancedTableToolbar from './EnhancedTableToolbar'
 
-const createData = (id, name, startDate, endDate) => {
-  return {
-    id,
-    name,
-    startDate,
-    endDate
-  }
-}
-
-const rows = [
-  createData(1, 'GTX 1050 TI', Date.now(), Date.now()),
-  createData(2, 'GTX 1060 TI', Date.now(), Date.now()),
-  createData(3, 'GTX 1070 TI', Date.now(), Date.now())
-]
-
 const headCells = [
   {
     id: 'name',
@@ -81,7 +66,7 @@ const getComparator = (order, orderBy) => {
     : (a, b) => -descendingComparator(a, b, orderBy)
 }
 
-const GaransiTable = () => {
+const GaransiTable = ({ rows }) => {
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState('calories')
   const [selected, setSelected] = useState([])
