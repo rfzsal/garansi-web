@@ -1,3 +1,6 @@
+// ** MUI locale
+import { idID } from '@mui/material/locale'
+
 // ** MUI Imports
 import CssBaseline from '@mui/material/CssBaseline'
 import GlobalStyles from '@mui/material/GlobalStyles'
@@ -24,7 +27,7 @@ const ThemeComponent = props => {
   const coreThemeConfig = themeOptions(settings)
 
   // ** Pass ThemeOptions to CreateTheme Function to create partial theme without component overrides
-  let theme = createTheme(coreThemeConfig)
+  let theme = createTheme(coreThemeConfig, idID)
 
   // ** Continue theme creation and pass merged component overrides to CreateTheme function
   theme = createTheme(theme, {
