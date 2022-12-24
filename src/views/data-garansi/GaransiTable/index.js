@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Delete from 'mdi-material-ui/Delete'
 import Pencil from 'mdi-material-ui/Pencil'
 
+import { formatDate } from 'src/lib/date'
 import EnhancedTableHead from './EnhancedTableHead'
 import EnhancedTableToolbar from './EnhancedTableToolbar'
 
@@ -151,8 +152,8 @@ const GaransiTable = ({ rows }) => {
                       {row.name}
                     </TableCell>
                     <TableCell align='left'>{row.id}</TableCell>
-                    <TableCell align='center'>{row.startDate}</TableCell>
-                    <TableCell align='center'>{row.endDate}</TableCell>
+                    <TableCell align='center'>{formatDate(row.startDate)}</TableCell>
+                    <TableCell align='center'>{formatDate(row.endDate)}</TableCell>
                     <TableCell align='right'>
                       <Box sx={{ mr: -2 }}>
                         <Tooltip title='Ubah'>
