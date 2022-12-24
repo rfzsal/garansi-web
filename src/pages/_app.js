@@ -27,6 +27,9 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 // ** Global css styles
 import '../../styles/globals.css'
 
+// ** Custom Hook
+import { ProvideGaransi } from 'src/hooks/useGaransi'
+
 const clientSideEmotionCache = createEmotionCache()
 
 // ** Pace Loader
@@ -64,7 +67,11 @@ const App = props => {
       <SettingsProvider>
         <SettingsConsumer>
           {({ settings }) => {
-            return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
+            return (
+              <ThemeComponent settings={settings}>
+                <ProvideGaransi>{getLayout(<Component {...pageProps} />)}</ProvideGaransi>
+              </ThemeComponent>
+            )
           }}
         </SettingsConsumer>
       </SettingsProvider>
