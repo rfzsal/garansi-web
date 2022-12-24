@@ -11,6 +11,8 @@ const EnhancedTableHead = props => {
   const { onSelectAllClick, headCells, order, orderBy, numSelected, rowCount, onRequestSort } = props
 
   const createSortHandler = property => event => {
+    if (property === 'action') return
+
     onRequestSort(event, property)
   }
 
