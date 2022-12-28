@@ -20,6 +20,7 @@
     "apexcharts-clevision": "3.28.5",
     "axios": "^1.2.1",
     "babel-eslint": "^10.1.0",
+    "bcrypt": "^5.1.0",
     "clsx": "^1.1.1",
     "date-fns": "^2.29.3",
     "mdi-material-ui": "^7.1.0",
