@@ -12,8 +12,8 @@ const ProvideGaransi = ({ children }) => {
 const useGaransi = () => useContext(GaransiContext)
 
 const useProvideGaransi = () => {
-  const [loading, setLoading] = useState(null)
-  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
 
   const [data, setData] = useState([])
 
@@ -24,7 +24,7 @@ const useProvideGaransi = () => {
       .get('/api/garansi')
       .then(res => {
         setData(res.data.data)
-        setError(null)
+        setError(false)
       })
       .catch(error => {
         setData([])
