@@ -12,7 +12,7 @@ import Link from '@mui/material/Link'
 import Import from 'mdi-material-ui/Import'
 
 import { useDialog } from 'src/hooks/useDialog'
-import { readFile } from 'src/lib/excel'
+import { exportFile, readFile } from 'src/lib/excel'
 
 const ImportDataGaransi = ({ open }) => {
   const { closeDialog } = useDialog()
@@ -35,6 +35,14 @@ const ImportDataGaransi = ({ open }) => {
     console.log(data || error)
   }
 
+  const handleGetTemplate = event => {
+    event.preventDefault()
+
+    const rowsData = [['id', 'nama_produk', 'tanggal_mulai', 'tanggal_akhir']]
+
+    exportFile(rowsData, 'template_data_garansi.xlsx')
+  }
+
   return (
     <>
       <Dialog open={open} maxWidth='xs' fullWidth>
@@ -42,7 +50,10 @@ const ImportDataGaransi = ({ open }) => {
 
         <DialogContent>
           <DialogContentText>
-            Template import bisa diunduh <Link href='#'>disini</Link>
+            Template import bisa diunduh{' '}
+            <Link onClick={handleGetTemplate} href='#'>
+              disini
+            </Link>
           </DialogContentText>
 
           <Box sx={{ mt: 2 }}>

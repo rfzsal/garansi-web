@@ -13,13 +13,13 @@ const readFile = async file => {
   }
 }
 
-const exportFile = aoa => {
+const exportFile = (aoa, fileName) => {
   try {
     const wb = utils.book_new()
     const ws = utils.aoa_to_sheet(aoa)
     utils.book_append_sheet(wb, ws, 'Sheet1')
 
-    writeFile(wb, 'data_garansi.xlsx')
+    writeFile(wb, fileName)
 
     return [true, null]
   } catch (error) {

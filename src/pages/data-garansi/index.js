@@ -39,7 +39,7 @@ const DataGaransi = () => {
       rowsData.push([row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir])
     })
 
-    exportFile(rowsData)
+    exportFile(rowsData, 'data_garansi.xlsx')
   }
 
   return (
