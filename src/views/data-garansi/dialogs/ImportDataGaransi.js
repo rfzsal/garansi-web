@@ -7,10 +7,12 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import Box from '@mui/material/Box'
 import { visuallyHidden } from '@mui/utils'
+import Link from '@mui/material/Link'
 
 import Import from 'mdi-material-ui/Import'
 
 import { useDialog } from 'src/hooks/useDialog'
+import { readFile } from 'src/lib/excel'
 
 const ImportDataGaransi = ({ open }) => {
   const { closeDialog } = useDialog()
@@ -26,9 +28,11 @@ const ImportDataGaransi = ({ open }) => {
     setFile(event.target.files[0])
   }
 
-  const handleImport = () => {
+  const handleImport = async () => {
     if (!file) return
-    console.log(file)
+
+    const [data, error] = await readFile(file)
+    console.log(data || error)
   }
 
   return (
@@ -37,11 +41,13 @@ const ImportDataGaransi = ({ open }) => {
         <DialogTitle>Import Data Garansi</DialogTitle>
 
         <DialogContent>
-          <DialogContentText>Import data hanya bisa menggunakan file Excel</DialogContentText>
+          <DialogContentText>
+            Template import bisa diunduh <Link href='#'>disini</Link>
+          </DialogContentText>
 
           <Box sx={{ mt: 2 }}>
             <Box sx={visuallyHidden}>
-              <input type='file' ref={inputRef} onChange={handleChangeFile} />
+              <input type='file' ref={inputRef} accept='.xlsx, .xls' onChange={handleChangeFile} />
             </Box>
 
             <Button onClick={clickFileInput} variant='outlined' fullWidth startIcon={file ? null : <Import />}>
