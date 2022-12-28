@@ -8,6 +8,7 @@ import Plus from 'mdi-material-ui/Plus'
 import Import from 'mdi-material-ui/Import'
 import Export from 'mdi-material-ui/Export'
 
+import { exportFile } from 'src/lib/excel'
 import { useGaransi } from 'src/hooks/useGaransi'
 import { useDialog } from 'src/hooks/useDialog'
 import { withSessionSsr } from 'src/lib/session'
@@ -32,6 +33,16 @@ const DataGaransi = () => {
     return createData(row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir)
   })
 
+  const handleExport = () => {
+    const rowsData = [['id', 'nama_produk', 'tanggal_mulai', 'tanggal_akhir']]
+    data.forEach(row => {
+      rowsData.push([row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir])
+    })
+
+    const x = exportFile(rowsData)
+    console.log(x)
+  }
+
   return (
     <>
       <Grid container spacing={6}>
@@ -43,7 +54,13 @@ const DataGaransi = () => {
             <Button variant='contained' size='small' fullWidth={fullWidth} startIcon={<Import />}>
               Import Data Garansi
             </Button>
-            <Button variant='contained' size='small' fullWidth={fullWidth} startIcon={<Export />}>
+            <Button
+              onClick={handleExport}
+              variant='contained'
+              size='small'
+              fullWidth={fullWidth}
+              startIcon={<Export />}
+            >
               Export Data Garansi
             </Button>
           </Stack>
