@@ -12,6 +12,7 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import { styled } from '@mui/material/styles'
 import MuiCard from '@mui/material/Card'
 import InputAdornment from '@mui/material/InputAdornment'
+import axios from 'axios'
 
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
@@ -28,6 +29,7 @@ const Masuk = () => {
   const [values, setValues] = useState({
     username: '',
     password: '',
+    loading: false,
     showPassword: false
   })
 
@@ -46,7 +48,19 @@ const Masuk = () => {
   }
 
   const handleLogin = () => {
-    console.log({ username: values.username, password: values.password })
+    setValues({ ...values, loading: true })
+
+    axios
+      .post('/api/auth/login', { username: values.username, password: values.password })
+      .then(res => {
+        if (res.data) router.replace('/')
+      })
+      .catch(error => {
+        return error
+      })
+      .finally(() => {
+        setValues({ ...values, loading: false })
+      })
   }
 
   return (
