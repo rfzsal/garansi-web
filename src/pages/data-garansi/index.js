@@ -47,10 +47,10 @@ const DataGaransi = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Stack gap={2} direction={fullWidth ? 'column' : 'row'}>
-            <Button onClick={openDialog} variant='contained' size='small' fullWidth={fullWidth} startIcon={<Plus />}>
+            <Button variant='contained' size='small' fullWidth={fullWidth} startIcon={<Plus />}>
               Tambah Data Garansi
             </Button>
-            <Button variant='contained' size='small' fullWidth={fullWidth} startIcon={<Import />}>
+            <Button onClick={openDialog} variant='contained' size='small' fullWidth={fullWidth} startIcon={<Import />}>
               Import Data Garansi
             </Button>
             <Button
