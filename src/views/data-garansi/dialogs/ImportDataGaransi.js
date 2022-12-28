@@ -35,6 +35,8 @@ const ImportDataGaransi = ({ open }) => {
     const [data] = await readFile(file)
 
     await importData(data)
+
+    handleDialogClose()
   }
 
   const handleGetTemplate = event => {
@@ -45,9 +47,14 @@ const ImportDataGaransi = ({ open }) => {
     exportFile(rowsData, 'template_data_garansi.xlsx')
   }
 
+  const handleDialogClose = () => {
+    setFile(null)
+    closeDialog()
+  }
+
   return (
     <>
-      <Dialog open={open} maxWidth='xs' fullWidth>
+      <Dialog open={open} onClose={handleDialogClose} maxWidth='xs' fullWidth>
         <DialogTitle>Import Data Garansi</DialogTitle>
 
         <DialogContent>
@@ -70,7 +77,7 @@ const ImportDataGaransi = ({ open }) => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={closeDialog}>Batal</Button>
+          <Button onClick={handleDialogClose}>Batal</Button>
           <Button onClick={handleImport}>Import</Button>
         </DialogActions>
       </Dialog>
