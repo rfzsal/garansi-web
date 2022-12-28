@@ -13,8 +13,10 @@ import Import from 'mdi-material-ui/Import'
 
 import { useDialog } from 'src/hooks/useDialog'
 import { exportFile, readFile } from 'src/lib/excel'
+import { useGaransi } from 'src/hooks/useGaransi'
 
 const ImportDataGaransi = ({ open }) => {
+  const { importData } = useGaransi()
   const { closeDialog } = useDialog()
   const [file, setFile] = useState(null)
 
@@ -30,9 +32,9 @@ const ImportDataGaransi = ({ open }) => {
 
   const handleImport = async () => {
     if (!file) return
+    const [data] = await readFile(file)
 
-    const [data, error] = await readFile(file)
-    console.log(data || error)
+    await importData(data)
   }
 
   const handleGetTemplate = event => {

@@ -35,11 +35,22 @@ const useProvideGaransi = () => {
       })
   }
 
+  const importData = async data => {
+    try {
+      await axios.post('/api/garansi/import', { data })
+      refresh()
+
+      return [true, null]
+    } catch (error) {
+      return [null, error]
+    }
+  }
+
   useEffect(() => {
     refresh()
   }, [])
 
-  return { loading, error, data }
+  return { loading, error, data, refresh, importData }
 }
 
 export { ProvideGaransi, useGaransi }
