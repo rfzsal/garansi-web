@@ -13,8 +13,8 @@ const EnhancedTableToolbar = props => {
   return (
     <Toolbar
       sx={{
-        pl: { sm: 5 },
-        pr: { sm: 3 },
+        pl: { xs: 5 },
+        pr: { xs: 3 },
         ...(numSelected > 0 && {
           bgcolor: theme => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity)
         })
