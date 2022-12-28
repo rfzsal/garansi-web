@@ -22,6 +22,8 @@ import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 
+import { withSessionSsr } from 'src/lib/session'
+
 const Dashboard = () => {
   return (
     <ApexChartWrapper>
@@ -97,5 +99,23 @@ const Dashboard = () => {
     </ApexChartWrapper>
   )
 }
+
+export const getServerSideProps = withSessionSsr(async function getServerSideProps({ req }) {
+  const user = req.session.user
+
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/masuk'
+      },
+      props: {}
+    }
+  }
+
+  return {
+    props: { user: req.session.user }
+  }
+})
 
 export default Dashboard

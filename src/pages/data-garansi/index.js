@@ -10,6 +10,7 @@ import Export from 'mdi-material-ui/Export'
 
 import { useGaransi } from 'src/hooks/useGaransi'
 import { useDialog } from 'src/hooks/useDialog'
+import { withSessionSsr } from 'src/lib/session'
 import GaransiTable from 'src/views/data-garansi/GaransiTable'
 import ImportDataGaransi from 'src/views/data-garansi/dialogs/ImportDataGaransi'
 
@@ -59,5 +60,23 @@ const DataGaransi = () => {
     </>
   )
 }
+
+export const getServerSideProps = withSessionSsr(async function getServerSideProps({ req }) {
+  const user = req.session.user
+
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/masuk'
+      },
+      props: {}
+    }
+  }
+
+  return {
+    props: { user: req.session.user }
+  }
+})
 
 export default DataGaransi

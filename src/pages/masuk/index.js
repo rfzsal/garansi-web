@@ -19,6 +19,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
+import { withSessionSsr } from 'src/lib/session'
 import FooterIllustration from 'src/views/masuk/FooterIllustration'
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -112,5 +113,25 @@ const Masuk = () => {
   )
 }
 Masuk.getLayout = page => <BlankLayout>{page}</BlankLayout>
+
+export const getServerSideProps = withSessionSsr(async function getServerSideProps({ req }) {
+  const user = req.session.user
+
+  if (user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/'
+      },
+      props: {
+        user: req.session.user
+      }
+    }
+  }
+
+  return {
+    props: {}
+  }
+})
 
 export default Masuk
