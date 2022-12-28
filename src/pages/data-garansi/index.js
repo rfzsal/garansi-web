@@ -39,8 +39,7 @@ const DataGaransi = () => {
       rowsData.push([row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir])
     })
 
-    const x = exportFile(rowsData)
-    console.log(x)
+    exportFile(rowsData)
   }
 
   return (
