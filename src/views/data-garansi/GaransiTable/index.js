@@ -93,6 +93,10 @@ const GaransiTable = () => {
     return createData(row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir)
   })
 
+  const currentVisibleRow = rows
+    .sort(getComparator(order, orderBy))
+    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
@@ -101,7 +105,7 @@ const GaransiTable = () => {
 
   const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelected = rows.map(n => n.id)
+      const newSelected = currentVisibleRow.map(n => n.id)
       setSelected(newSelected)
 
       return
@@ -127,10 +131,12 @@ const GaransiTable = () => {
   }
 
   const handleChangePage = (event, newPage) => {
+    setSelected([])
     setPage(newPage)
   }
 
   const handleChangeRowsPerPage = event => {
+    setSelected([])
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
@@ -165,45 +171,42 @@ const GaransiTable = () => {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={currentVisibleRow.length}
             />
 
             <TableBody>
-              {rows
-                .sort(getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id)
+              {currentVisibleRow.map((row, index) => {
+                const isItemSelected = isSelected(row.id)
 
-                  return (
-                    <TableRow hover tabIndex={-1} key={row.id} selected={isItemSelected}>
-                      <TableCell onClick={event => handleClick(event, row.id)} padding='checkbox'>
-                        <Checkbox color='primary' checked={isItemSelected} sx={{ ml: -3 }} />
-                      </TableCell>
-                      <TableCell component='th' scope='row' padding='none'>
-                        {row.name}
-                      </TableCell>
-                      <TableCell align='left'>{row.id}</TableCell>
-                      <TableCell align='center'>{formatDate(row.startDate)}</TableCell>
-                      <TableCell align='center'>{formatDate(row.endDate)}</TableCell>
-                      <TableCell align='right'>
-                        <Box sx={{ mr: -2 }}>
-                          <Tooltip title='Ubah'>
-                            <IconButton disabled={selected.length > 0} onClick={handleUpdateModal(row)}>
-                              <Pencil />
-                            </IconButton>
-                          </Tooltip>
+                return (
+                  <TableRow hover tabIndex={-1} key={row.id} selected={isItemSelected}>
+                    <TableCell onClick={event => handleClick(event, row.id)} padding='checkbox'>
+                      <Checkbox color='primary' checked={isItemSelected} sx={{ ml: -3 }} />
+                    </TableCell>
+                    <TableCell component='th' scope='row' padding='none'>
+                      {row.name}
+                    </TableCell>
+                    <TableCell align='left'>{row.id}</TableCell>
+                    <TableCell align='center'>{formatDate(row.startDate)}</TableCell>
+                    <TableCell align='center'>{formatDate(row.endDate)}</TableCell>
+                    <TableCell align='right'>
+                      <Box sx={{ mr: -2 }}>
+                        <Tooltip title='Ubah'>
+                          <IconButton disabled={selected.length > 0} onClick={handleUpdateModal(row)}>
+                            <Pencil />
+                          </IconButton>
+                        </Tooltip>
 
-                          <Tooltip title='Hapus'>
-                            <IconButton disabled={selected.length > 0} onClick={handleOpenDeleteModal(row.id)}>
-                              <Delete />
-                            </IconButton>
-                          </Tooltip>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
+                        <Tooltip title='Hapus'>
+                          <IconButton disabled={selected.length > 0} onClick={handleOpenDeleteModal(row.id)}>
+                            <Delete />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
 
               {emptyRows > 0 && (
                 <TableRow
