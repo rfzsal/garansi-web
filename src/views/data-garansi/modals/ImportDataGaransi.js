@@ -67,15 +67,7 @@ const ImportDataGaransi = ({ open }) => {
 
   return (
     <>
-      <Modal
-        open={open}
-        onClose={handleCloseModal}
-        maxWidth='xs'
-        fullWidth
-        disableEnforceFocus
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
+      <Modal open={open} onClose={handleCloseModal} closeAfterTransition BackdropComponent={Backdrop}>
         <Fade in={open}>
           <Box sx={style}>
             <Typography variant='h6' component='h2'>
