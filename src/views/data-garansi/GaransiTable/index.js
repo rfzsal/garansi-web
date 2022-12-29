@@ -19,6 +19,7 @@ import { useGaransi } from 'src/hooks/useGaransi'
 import EnhancedTableHead from './EnhancedTableHead'
 import EnhancedTableToolbar from './EnhancedTableToolbar'
 import RemoveDataGaransiModal from '../modals/RemoveDataGaransi'
+import UpdateDataGaransi from '../modals/UpdateDataGaransi'
 
 const headCells = [
   {
@@ -138,6 +139,10 @@ const GaransiTable = () => {
     openModal(id)
   }
 
+  const handleUpdateModal = data => () => {
+    openModal({ name: 'UpdateDataGaransi', data })
+  }
+
   const isSelected = id => selected.indexOf(id) !== -1
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
@@ -184,7 +189,7 @@ const GaransiTable = () => {
                       <TableCell align='right'>
                         <Box sx={{ mr: -2 }}>
                           <Tooltip title='Ubah'>
-                            <IconButton>
+                            <IconButton disabled={selected.length > 0} onClick={handleUpdateModal(row)}>
                               <Pencil />
                             </IconButton>
                           </Tooltip>
@@ -235,6 +240,10 @@ const GaransiTable = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
+
+      <UpdateDataGaransi
+        open={rows.some(row => row.id === modalOpened.data?.id) && modalOpened.name === 'UpdateDataGaransi'}
+      />
 
       <RemoveDataGaransiModal open={rows.some(row => row.id === modalOpened) || false} />
       <RemoveDataGaransiModal open={modalOpened.length === selected.length} />

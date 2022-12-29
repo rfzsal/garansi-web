@@ -88,11 +88,22 @@ const useProvideGaransi = () => {
     }
   }
 
+  const editData = async (id, newData) => {
+    try {
+      await axios.put(`/api/garansi/update?id=${id}`, { ...newData })
+      refresh()
+
+      return [true, null]
+    } catch (error) {
+      return [null, error]
+    }
+  }
+
   useEffect(() => {
     refresh()
   }, [])
 
-  return { loading, error, data, refresh, importData, addData, removeData, removeData, removeBulkData }
+  return { loading, error, data, refresh, importData, addData, removeData, removeData, removeBulkData, editData }
 }
 
 export { ProvideGaransi, useGaransi }
