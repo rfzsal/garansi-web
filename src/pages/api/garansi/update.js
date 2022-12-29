@@ -9,9 +9,6 @@ const handler = async (req, res) => {
 
   if (req.method !== 'PUT') return res.status(405).end()
 
-  console.log(req.query)
-  console.log(req.body)
-
   if (!req.query.id) return res.status(400).end()
 
   const { nama_produk, tanggal_mulai, tanggal_akhir } = req.body
