@@ -89,13 +89,23 @@ const GaransiTable = () => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
-  const rows = data.map(row => {
+  const [filteredRow, setFilteredRow] = useState([])
+
+  const rows = filteredRow.map(row => {
     return createData(row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir)
   })
 
   const currentVisibleRow = rows
     .sort(getComparator(order, orderBy))
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+
+  const handleSearch = keyword => {
+    if (keyword.trim() === '') return setFilteredRow(data)
+
+    const newFilteredRow = data.filter(row => row.id.indexOf(keyword) > 0)
+
+    setFilteredRow(newFilteredRow)
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -154,13 +164,17 @@ const GaransiTable = () => {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   useEffect(() => {
+    setFilteredRow(data)
+  }, [data])
+
+  useEffect(() => {
     setSelected([])
   }, [data])
 
   return (
     <>
       <Box sx={{ width: '100%' }}>
-        <EnhancedTableToolbar selected={selected} />
+        <EnhancedTableToolbar selected={selected} onSearch={handleSearch} />
 
         <TableContainer>
           <Table sx={{ minWidth: 750 }} size={'medium'}>
