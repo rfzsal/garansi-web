@@ -14,6 +14,7 @@ import { useDialog } from 'src/hooks/useDialog'
 import { withSessionSsr } from 'src/lib/session'
 import GaransiTable from 'src/views/data-garansi/GaransiTable'
 import ImportDataGaransi from 'src/views/data-garansi/dialogs/ImportDataGaransi'
+import AddDataGaransi from 'src/views/data-garansi/dialogs/AddDataGaransi'
 
 const createData = (id, name, startDate, endDate) => {
   return {
@@ -47,10 +48,22 @@ const DataGaransi = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Stack gap={2} direction={fullWidth ? 'column' : 'row'}>
-            <Button variant='contained' size='small' fullWidth={fullWidth} startIcon={<Plus />}>
+            <Button
+              onClick={() => openDialog('AddDataGaransi')}
+              variant='contained'
+              size='small'
+              fullWidth={fullWidth}
+              startIcon={<Plus />}
+            >
               Tambah Data Garansi
             </Button>
-            <Button onClick={openDialog} variant='contained' size='small' fullWidth={fullWidth} startIcon={<Import />}>
+            <Button
+              onClick={() => openDialog('ImportDataGaransi')}
+              variant='contained'
+              size='small'
+              fullWidth={fullWidth}
+              startIcon={<Import />}
+            >
               Import Data Garansi
             </Button>
             <Button
@@ -72,7 +85,8 @@ const DataGaransi = () => {
         </Grid>
       </Grid>
 
-      <ImportDataGaransi open={dialogOpened} />
+      <AddDataGaransi open={dialogOpened === 'AddDataGaransi'} />
+      <ImportDataGaransi open={dialogOpened === 'ImportDataGaransi'} />
     </>
   )
 }

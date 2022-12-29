@@ -13,8 +13,8 @@ const useDialog = () => useContext(DialogContext)
 const useProvideDialog = () => {
   const [dialogOpened, setDialogOpened] = useState(false)
 
-  const openDialog = () => {
-    setDialogOpened(true)
+  const openDialog = dialogId => {
+    setDialogOpened(dialogId)
   }
 
   const closeDialog = () => {
