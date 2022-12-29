@@ -16,23 +16,10 @@ import GaransiTable from 'src/views/data-garansi/GaransiTable'
 import ImportDataGaransi from 'src/views/data-garansi/modals/ImportDataGaransi'
 import AddDataGaransi from 'src/views/data-garansi/modals/AddDataGaransi'
 
-const createData = (id, name, startDate, endDate) => {
-  return {
-    id,
-    name,
-    startDate,
-    endDate
-  }
-}
-
 const DataGaransi = () => {
   const fullWidth = useMediaQuery(theme => theme.breakpoints.down('md'))
   const { data } = useGaransi()
   const { modalOpened, openModal } = useModal()
-
-  const rows = data.map(row => {
-    return createData(row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir)
-  })
 
   const handleExport = () => {
     const rowsData = [['id', 'nama_produk', 'tanggal_mulai', 'tanggal_akhir']]
@@ -80,7 +67,7 @@ const DataGaransi = () => {
 
         <Grid item xs={12}>
           <Card>
-            <GaransiTable rows={rows} />
+            <GaransiTable />
           </Card>
         </Grid>
       </Grid>

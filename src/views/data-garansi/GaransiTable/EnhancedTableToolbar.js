@@ -5,24 +5,30 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
+import { useModal } from 'src/hooks/useModal'
 import Delete from 'mdi-material-ui/Delete'
 
 const EnhancedTableToolbar = props => {
-  const { numSelected } = props
+  const { openModal } = useModal()
+  const { selected } = props
+
+  const handleOpenDeleteModal = () => {
+    openModal(selected)
+  }
 
   return (
     <Toolbar
       sx={{
         pl: { xs: 5 },
         pr: { xs: 3 },
-        ...(numSelected > 0 && {
+        ...(selected.length > 0 && {
           bgcolor: theme => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity)
         })
       }}
     >
-      {numSelected > 0 ? (
+      {selected.length > 0 ? (
         <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
-          {numSelected} terpilih
+          {selected.length} terpilih
         </Typography>
       ) : (
         <Typography sx={{ flex: '1 1 100%' }} variant='h6' component='div'>
@@ -30,9 +36,9 @@ const EnhancedTableToolbar = props => {
         </Typography>
       )}
 
-      {numSelected > 0 && (
+      {selected.length > 0 && (
         <Tooltip title='Hapus'>
-          <IconButton>
+          <IconButton onClick={handleOpenDeleteModal}>
             <Delete />
           </IconButton>
         </Tooltip>
@@ -42,7 +48,7 @@ const EnhancedTableToolbar = props => {
 }
 
 EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired
+  selected: PropTypes.arrayOf(PropTypes.string).isRequired
 }
 
 export default EnhancedTableToolbar

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -15,6 +15,7 @@ import Pencil from 'mdi-material-ui/Pencil'
 
 import { formatDate } from 'src/lib/date'
 import { useModal } from 'src/hooks/useModal'
+import { useGaransi } from 'src/hooks/useGaransi'
 import EnhancedTableHead from './EnhancedTableHead'
 import EnhancedTableToolbar from './EnhancedTableToolbar'
 import RemoveDataGaransiModal from '../modals/RemoveDataGaransi'
@@ -69,13 +70,27 @@ const getComparator = (order, orderBy) => {
     : (a, b) => -descendingComparator(a, b, orderBy)
 }
 
-const GaransiTable = ({ rows }) => {
+const createData = (id, name, startDate, endDate) => {
+  return {
+    id,
+    name,
+    startDate,
+    endDate
+  }
+}
+
+const GaransiTable = () => {
+  const { data } = useGaransi()
   const { modalOpened, openModal } = useModal()
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState('calories')
   const [selected, setSelected] = useState([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
+
+  const rows = data.map(row => {
+    return createData(row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir)
+  })
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -127,10 +142,14 @@ const GaransiTable = ({ rows }) => {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
+  useEffect(() => {
+    setSelected([])
+  }, [data])
+
   return (
     <>
       <Box sx={{ width: '100%' }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar selected={selected} />
 
         <TableContainer>
           <Table sx={{ minWidth: 750 }} size={'medium'}>
@@ -218,6 +237,7 @@ const GaransiTable = ({ rows }) => {
       </Box>
 
       <RemoveDataGaransiModal open={rows.some(row => row.id === modalOpened) || false} />
+      <RemoveDataGaransiModal open={modalOpened.length === selected.length} />
     </>
   )
 }

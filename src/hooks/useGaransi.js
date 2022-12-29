@@ -77,11 +77,22 @@ const useProvideGaransi = () => {
     }
   }
 
+  const removeBulkData = async arrayOfId => {
+    try {
+      await axios.post('/api/garansi/bulk-remove', { data: arrayOfId })
+      refresh()
+
+      return [true, null]
+    } catch (error) {
+      return [null, error]
+    }
+  }
+
   useEffect(() => {
     refresh()
   }, [])
 
-  return { loading, error, data, refresh, importData, addData, removeData, removeData }
+  return { loading, error, data, refresh, importData, addData, removeData, removeData, removeBulkData }
 }
 
 export { ProvideGaransi, useGaransi }

@@ -22,7 +22,7 @@ const style = {
 }
 
 const RemoveDataGaransiModal = ({ open }) => {
-  const { removeData } = useGaransi()
+  const { removeData, removeBulkData } = useGaransi()
   const { closeModal, modalOpened } = useModal()
 
   const handleCloseModal = () => {
@@ -30,7 +30,12 @@ const RemoveDataGaransiModal = ({ open }) => {
   }
 
   const handleConfirm = async () => {
-    await removeData(modalOpened)
+    if (typeof modalOpened === 'string') {
+      await removeData(modalOpened)
+    } else {
+      await removeBulkData(modalOpened)
+    }
+
     handleCloseModal()
   }
 
