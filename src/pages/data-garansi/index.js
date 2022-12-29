@@ -31,7 +31,7 @@ const DataGaransi = () => {
   const { modalOpened, openModal } = useModal()
 
   const rows = data.map(row => {
-    return createData(row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir)
+    return createData(row.id, row.nama_produk, row.tanggal_mulai * 1000, row.tanggal_akhir * 1000)
   })
 
   const handleExport = () => {
