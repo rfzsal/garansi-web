@@ -31,7 +31,6 @@ const handler = async (req, res) => {
   const [status, error] = await query(`INSERT INTO data_garansi VALUES${values}`)
 
   if (error) {
-    console.log(error)
     res.status(500).send({ error })
   } else {
     res.status(200).send({ status })
