@@ -59,6 +59,19 @@ const useProvideGaransi = () => {
     try {
       await axios.post('/api/garansi/add', { ...data })
       refresh()
+
+      return [true, null]
+    } catch (error) {
+      return [null, error]
+    }
+  }
+
+  const removeData = async id => {
+    try {
+      await axios.delete(`/api/garansi/remove?id=${id}`)
+      refresh()
+
+      return [true, null]
     } catch (error) {
       return [null, error]
     }
@@ -68,7 +81,7 @@ const useProvideGaransi = () => {
     refresh()
   }, [])
 
-  return { loading, error, data, refresh, importData, addData }
+  return { loading, error, data, refresh, importData, addData, removeData, removeData }
 }
 
 export { ProvideGaransi, useGaransi }

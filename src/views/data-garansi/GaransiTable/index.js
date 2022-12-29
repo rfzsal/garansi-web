@@ -14,8 +14,10 @@ import Delete from 'mdi-material-ui/Delete'
 import Pencil from 'mdi-material-ui/Pencil'
 
 import { formatDate } from 'src/lib/date'
+import { useModal } from 'src/hooks/useModal'
 import EnhancedTableHead from './EnhancedTableHead'
 import EnhancedTableToolbar from './EnhancedTableToolbar'
+import RemoveDataGaransiModal from '../modals/RemoveDataGaransi'
 
 const headCells = [
   {
@@ -68,6 +70,7 @@ const getComparator = (order, orderBy) => {
 }
 
 const GaransiTable = ({ rows }) => {
+  const { modalOpened, openModal } = useModal()
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState('calories')
   const [selected, setSelected] = useState([])
@@ -116,98 +119,106 @@ const GaransiTable = ({ rows }) => {
     setPage(0)
   }
 
+  const handleOpenDeleteModal = id => () => {
+    openModal(id)
+  }
+
   const isSelected = id => selected.indexOf(id) !== -1
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <EnhancedTableToolbar numSelected={selected.length} />
+    <>
+      <Box sx={{ width: '100%' }}>
+        <EnhancedTableToolbar numSelected={selected.length} />
 
-      <TableContainer>
-        <Table sx={{ minWidth: 750 }} size={'medium'}>
-          <EnhancedTableHead
-            headCells={headCells}
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={rows.length}
-          />
+        <TableContainer>
+          <Table sx={{ minWidth: 750 }} size={'medium'}>
+            <EnhancedTableHead
+              headCells={headCells}
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={rows.length}
+            />
 
-          <TableBody>
-            {rows
-              .sort(getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.id)
+            <TableBody>
+              {rows
+                .sort(getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.id)
 
-                return (
-                  <TableRow hover tabIndex={-1} key={row.id} selected={isItemSelected}>
-                    <TableCell onClick={event => handleClick(event, row.id)} padding='checkbox'>
-                      <Checkbox color='primary' checked={isItemSelected} sx={{ ml: -3 }} />
-                    </TableCell>
-                    <TableCell component='th' scope='row' padding='none'>
-                      {row.name}
-                    </TableCell>
-                    <TableCell align='left'>{row.id}</TableCell>
-                    <TableCell align='center'>{formatDate(row.startDate)}</TableCell>
-                    <TableCell align='center'>{formatDate(row.endDate)}</TableCell>
-                    <TableCell align='right'>
-                      <Box sx={{ mr: -2 }}>
-                        <Tooltip title='Ubah'>
-                          <IconButton>
-                            <Pencil />
-                          </IconButton>
-                        </Tooltip>
+                  return (
+                    <TableRow hover tabIndex={-1} key={row.id} selected={isItemSelected}>
+                      <TableCell onClick={event => handleClick(event, row.id)} padding='checkbox'>
+                        <Checkbox color='primary' checked={isItemSelected} sx={{ ml: -3 }} />
+                      </TableCell>
+                      <TableCell component='th' scope='row' padding='none'>
+                        {row.name}
+                      </TableCell>
+                      <TableCell align='left'>{row.id}</TableCell>
+                      <TableCell align='center'>{formatDate(row.startDate)}</TableCell>
+                      <TableCell align='center'>{formatDate(row.endDate)}</TableCell>
+                      <TableCell align='right'>
+                        <Box sx={{ mr: -2 }}>
+                          <Tooltip title='Ubah'>
+                            <IconButton>
+                              <Pencil />
+                            </IconButton>
+                          </Tooltip>
 
-                        <Tooltip title='Hapus'>
-                          <IconButton>
-                            <Delete />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
+                          <Tooltip title='Hapus'>
+                            <IconButton disabled={selected.length > 0} onClick={handleOpenDeleteModal(row.id)}>
+                              <Delete />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
 
-            {emptyRows > 0 && (
-              <TableRow
-                style={{
-                  height: 53 * emptyRows
-                }}
-              >
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: 53 * emptyRows
+                  }}
+                >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
 
-            {rows.length === 0 && (
-              <TableRow
-                style={{
-                  height: 53 * emptyRows
-                }}
-              >
-                <TableCell align='center' colSpan={6}>
-                  Tidak ada data
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              {rows.length === 0 && (
+                <TableRow
+                  style={{
+                    height: 53 * emptyRows
+                  }}
+                >
+                  <TableCell align='center' colSpan={6}>
+                    Tidak ada data
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component='div'
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Box>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component='div'
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
+
+      <RemoveDataGaransiModal open={rows.some(row => row.id === modalOpened) || false} />
+    </>
   )
 }
 
