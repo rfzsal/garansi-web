@@ -55,6 +55,7 @@ const ImportDataGaransi = ({ open }) => {
     event.preventDefault()
 
     const rowsData = [['id', 'nama_produk', 'tanggal_mulai', 'tanggal_akhir']]
+    rowsData.push([1, 'RTX 3050', new Date(2023, 0, 1, 0, 0, -12, 0), new Date(2025, 0, 1, 0, 0, -12, 0)])
 
     exportFile(rowsData, 'template_data_garansi.xlsx')
   }
