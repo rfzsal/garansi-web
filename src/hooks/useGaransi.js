@@ -55,11 +55,20 @@ const useProvideGaransi = () => {
     }
   }
 
+  const addData = async data => {
+    try {
+      await axios.post('/api/garansi/add', { ...data })
+      refresh()
+    } catch (error) {
+      return [null, error]
+    }
+  }
+
   useEffect(() => {
     refresh()
   }, [])
 
-  return { loading, error, data, refresh, importData }
+  return { loading, error, data, refresh, importData, addData }
 }
 
 export { ProvideGaransi, useGaransi }

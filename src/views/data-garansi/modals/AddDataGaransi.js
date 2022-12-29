@@ -8,10 +8,13 @@ import Typography from '@mui/material/Typography'
 import DatePicker from 'react-datepicker'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
+import { isDate } from 'date-fns'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
+import { formatDate } from 'src/lib/date'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+import { useGaransi } from 'src/hooks/useGaransi'
 import { useModal } from 'src/hooks/useModal'
 
 const style = {
@@ -31,40 +34,45 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const AddDataGaransi = ({ open }) => {
+  const { addData } = useGaransi()
   const { closeModal } = useModal()
 
   const [values, setValues] = useState({
+    productId: '',
     productName: '',
     startDate: '',
     endDate: ''
   })
 
   const handleChange = prop => event => {
-    setValues({ ...values, [prop]: prop === 'productName' ? event.target.value : event })
+    if (isDate(event)) {
+      setValues({ ...values, [prop]: event })
+    } else {
+      setValues({ ...values, [prop]: event.target.value })
+    }
   }
 
   const handleCloseModal = () => {
-    setValues({ productName: '', startDate: '', endDate: '' })
+    setValues({ productId: '', productName: '', startDate: '', endDate: '' })
     closeModal()
   }
 
-  const handleSave = () => {
-    if (!values.productName || !values.startDate || !values.endDate) return
+  const handleSave = async () => {
+    if (!values.productId || !values.productName || !values.startDate || !values.endDate) return
 
-    console.log(values)
+    await addData({
+      id: values.productId,
+      nama_produk: values.productName,
+      tanggal_mulai: formatDate(values.startDate.getTime(), 'yyyy/MM/dd'),
+      tanggal_akhir: formatDate(values.endDate.getTime(), 'yyyy/MM/dd')
+    })
+
+    handleCloseModal()
   }
 
   return (
     <>
-      <Modal
-        open={open}
-        onClose={handleCloseModal}
-        maxWidth='xs'
-        fullWidth
-        disableEnforceFocus
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
+      <Modal open={open} onClose={handleCloseModal} closeAfterTransition BackdropComponent={Backdrop}>
         <Fade in={open}>
           <Box sx={style}>
             <Typography variant='h6' component='h2'>
@@ -78,6 +86,15 @@ const AddDataGaransi = ({ open }) => {
                 value={values.productName}
                 label='Nama Produk'
                 placeholder='RTX 3050 TI'
+                fullWidth
+              />
+
+              <TextField
+                margin='normal'
+                onChange={handleChange('productId')}
+                value={values.productId}
+                label='No. Seri'
+                placeholder='000000000'
                 fullWidth
               />
 
