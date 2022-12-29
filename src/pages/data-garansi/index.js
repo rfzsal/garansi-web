@@ -8,6 +8,7 @@ import { useSnackbar } from 'notistack'
 import Plus from 'mdi-material-ui/Plus'
 import Import from 'mdi-material-ui/Import'
 import Export from 'mdi-material-ui/Export'
+import Refresh from 'mdi-material-ui/Refresh'
 
 import { exportFile } from 'src/lib/excel'
 import { useGaransi } from 'src/hooks/useGaransi'
@@ -19,8 +20,8 @@ import AddDataGaransi from 'src/views/data-garansi/modals/AddDataGaransi'
 
 const DataGaransi = () => {
   const snack = useSnackbar()
-  const fullWidth = useMediaQuery(theme => theme.breakpoints.down('md'))
-  const { data } = useGaransi()
+  const fullWidth = useMediaQuery(theme => theme.breakpoints.down('lg'))
+  const { data, refresh } = useGaransi()
   const { modalOpened, openModal } = useModal()
 
   const handleExport = () => {
@@ -64,6 +65,9 @@ const DataGaransi = () => {
               startIcon={<Export />}
             >
               Export Data Garansi
+            </Button>
+            <Button onClick={refresh} variant='contained' size='small' fullWidth={fullWidth} startIcon={<Refresh />}>
+              Refresh Data Garansi
             </Button>
           </Stack>
         </Grid>
