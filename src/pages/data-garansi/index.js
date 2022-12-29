@@ -31,13 +31,13 @@ const DataGaransi = () => {
   const { modalOpened, openModal } = useModal()
 
   const rows = data.map(row => {
-    return createData(row.id, row.nama_produk, row.tanggal_mulai * 1000, row.tanggal_akhir * 1000)
+    return createData(row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir)
   })
 
   const handleExport = () => {
     const rowsData = [['id', 'nama_produk', 'tanggal_mulai', 'tanggal_akhir']]
     data.forEach(row => {
-      rowsData.push([row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir])
+      rowsData.push([row.id, row.nama_produk, new Date(row.tanggal_mulai), new Date(row.tanggal_akhir)])
     })
 
     exportFile(rowsData, 'data_garansi.xlsx')

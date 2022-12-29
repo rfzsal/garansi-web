@@ -1,10 +1,12 @@
+import { set } from 'date-fns'
 import { formatDate } from 'src/lib/date'
 import { query } from 'src/lib/mysql'
 import { withSessionRoute } from 'src/lib/session'
 
 const sheetDateToTimestamp = sheetDate => new Date(Date.UTC(0, 0, sheetDate - 1)).getTime()
 
-const toMysqlDate = date => formatDate(sheetDateToTimestamp(date), 'yyyy-MM-dd')
+const toMysqlDate = date =>
+  formatDate(set(sheetDateToTimestamp(date), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }), 'yyyy-MM-dd')
 
 const handler = async (req, res) => {
   const user = req.session.user
@@ -29,6 +31,7 @@ const handler = async (req, res) => {
   const [status, error] = await query(`INSERT INTO data_garansi VALUES${values}`)
 
   if (error) {
+    console.log(error)
     res.status(500).send({ error })
   } else {
     res.status(200).send({ status })
