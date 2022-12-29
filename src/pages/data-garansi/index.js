@@ -37,7 +37,7 @@ const DataGaransi = () => {
   const handleExport = () => {
     const rowsData = [['id', 'nama_produk', 'tanggal_mulai', 'tanggal_akhir']]
     data.forEach(row => {
-      rowsData.push([row.id, row.nama_produk, new Date(row.tanggal_mulai), new Date(row.tanggal_akhir)])
+      rowsData.push([row.id, row.nama_produk, new Date(row.tanggal_mulai - 12000), new Date(row.tanggal_akhir - 12000)])
     })
 
     exportFile(rowsData, 'data_garansi.xlsx')

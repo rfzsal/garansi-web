@@ -28,8 +28,8 @@ const useProvideGaransi = () => {
             return {
               id: row.id,
               nama_produk: row.nama_produk,
-              tanggal_mulai: row.tanggal_mulai * 1000 - 12000,
-              tanggal_akhir: row.tanggal_akhir * 1000 - 12000
+              tanggal_mulai: row.tanggal_mulai * 1000,
+              tanggal_akhir: row.tanggal_akhir * 1000
             }
           })
         )
