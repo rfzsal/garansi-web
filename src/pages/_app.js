@@ -8,6 +8,9 @@ import NProgress from 'nprogress'
 // ** Emotion Imports
 import { CacheProvider } from '@emotion/react'
 
+// ** Notistack
+import { SnackbarProvider } from 'notistack'
+
 // ** Config Imports
 import themeConfig from 'src/configs/themeConfig'
 
@@ -70,9 +73,11 @@ const App = props => {
           {({ settings }) => {
             return (
               <ThemeComponent settings={settings}>
-                <ProvideModal>
-                  <ProvideGaransi>{getLayout(<Component {...pageProps} />)}</ProvideGaransi>
-                </ProvideModal>
+                <SnackbarProvider maxSnack={1}>
+                  <ProvideModal>
+                    <ProvideGaransi>{getLayout(<Component {...pageProps} />)}</ProvideGaransi>
+                  </ProvideModal>
+                </SnackbarProvider>
               </ThemeComponent>
             )
           }}
