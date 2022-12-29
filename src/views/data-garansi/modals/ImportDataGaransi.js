@@ -8,6 +8,7 @@ import { visuallyHidden } from '@mui/utils'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
+import { useSnackbar } from 'notistack'
 
 import Import from 'mdi-material-ui/Import'
 
@@ -28,9 +29,12 @@ const style = {
 }
 
 const ImportDataGaransi = ({ open }) => {
+  const snack = useSnackbar()
   const { importData } = useGaransi()
   const { closeModal } = useModal()
   const [file, setFile] = useState(null)
+
+  const [loading, setLoading] = useState(false)
 
   const inputRef = useRef(null)
 
@@ -44,15 +48,24 @@ const ImportDataGaransi = ({ open }) => {
 
   const handleImport = async () => {
     if (!file) return
+
+    setLoading(true)
+
     const [data] = await readFile(file)
+    const [status, error] = await importData(data)
 
-    await importData(data)
+    setLoading(false)
 
+    if (error) return snack.enqueueSnackbar('Import data garansi gagal', { variant: 'error' })
+
+    snack.enqueueSnackbar('Import data garansi berhasil', { variant: 'success' })
     handleCloseModal()
   }
 
   const handleGetTemplate = event => {
     event.preventDefault()
+
+    if (loading) return
 
     const rowsData = [['id', 'nama_produk', 'tanggal_mulai', 'tanggal_akhir']]
     rowsData.push([1, 'RTX 3050', new Date(2023, 0, 1, 0, 0, -12, 0), new Date(2025, 0, 1, 0, 0, -12, 0)])
@@ -61,6 +74,8 @@ const ImportDataGaransi = ({ open }) => {
   }
 
   const handleCloseModal = () => {
+    if (loading) return
+
     setFile(null)
     closeModal()
   }
@@ -83,17 +98,27 @@ const ImportDataGaransi = ({ open }) => {
 
             <Box sx={{ mt: 2 }}>
               <Box sx={visuallyHidden}>
-                <input type='file' ref={inputRef} accept='.xlsx, .xls' onChange={handleChangeFile} />
+                <input disabled={loading} type='file' ref={inputRef} accept='.xlsx, .xls' onChange={handleChangeFile} />
               </Box>
 
-              <Button onClick={clickFileInput} variant='outlined' fullWidth startIcon={file ? null : <Import />}>
+              <Button
+                disabled={loading}
+                onClick={clickFileInput}
+                variant='outlined'
+                fullWidth
+                startIcon={file ? null : <Import />}
+              >
                 {file ? file.name : 'Import Data'}
               </Button>
             </Box>
 
             <Stack direction='row' justifyContent='flex-end' alignItems='center' spacing={2} marginTop={4}>
-              <Button onClick={handleCloseModal}>Batal</Button>
-              <Button onClick={handleImport}>Import</Button>
+              <Button disabled={loading} onClick={handleCloseModal}>
+                Batal
+              </Button>
+              <Button disabled={loading} onClick={handleImport}>
+                {loading ? 'Menyimpan...' : 'Import'}
+              </Button>
             </Stack>
           </Box>
         </Fade>

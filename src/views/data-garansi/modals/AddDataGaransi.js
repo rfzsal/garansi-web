@@ -9,6 +9,7 @@ import DatePicker from 'react-datepicker'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import { isDate } from 'date-fns'
+import { useSnackbar } from 'notistack'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -34,8 +35,11 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const AddDataGaransi = ({ open }) => {
+  const snack = useSnackbar()
   const { addData } = useGaransi()
   const { closeModal } = useModal()
+
+  const [loading, setLoading] = useState(false)
 
   const [values, setValues] = useState({
     productId: '',
@@ -53,6 +57,8 @@ const AddDataGaransi = ({ open }) => {
   }
 
   const handleCloseModal = () => {
+    if (loading) return
+
     setValues({ productId: '', productName: '', startDate: '', endDate: '' })
     closeModal()
   }
@@ -60,13 +66,20 @@ const AddDataGaransi = ({ open }) => {
   const handleSave = async () => {
     if (!values.productId || !values.productName || !values.startDate || !values.endDate) return
 
-    await addData({
+    setLoading(true)
+
+    const [status, error] = await addData({
       id: values.productId,
       nama_produk: values.productName,
       tanggal_mulai: formatDate(values.startDate.getTime(), 'yyyy/MM/dd'),
       tanggal_akhir: formatDate(values.endDate.getTime(), 'yyyy/MM/dd')
     })
 
+    setLoading(false)
+
+    if (error) return snack.enqueueSnackbar('Tambah data garansi gagal', { variant: 'error' })
+
+    snack.enqueueSnackbar('Tambah data garansi berhasil', { variant: 'success' })
     handleCloseModal()
   }
 
@@ -81,6 +94,7 @@ const AddDataGaransi = ({ open }) => {
 
             <Box sx={{ mt: 2 }}>
               <TextField
+                disabled={loading}
                 margin='normal'
                 onChange={handleChange('productName')}
                 value={values.productName}
@@ -90,6 +104,7 @@ const AddDataGaransi = ({ open }) => {
               />
 
               <TextField
+                disabled={loading}
                 margin='normal'
                 onChange={handleChange('productId')}
                 value={values.productId}
@@ -100,6 +115,7 @@ const AddDataGaransi = ({ open }) => {
 
               <DatePickerWrapper>
                 <DatePicker
+                  disabled={loading}
                   selected={values.startDate}
                   showYearDropdown
                   showMonthDropdown
@@ -109,6 +125,7 @@ const AddDataGaransi = ({ open }) => {
                 />
 
                 <DatePicker
+                  disabled={loading}
                   selected={values.endDate}
                   showYearDropdown
                   showMonthDropdown
@@ -120,8 +137,12 @@ const AddDataGaransi = ({ open }) => {
             </Box>
 
             <Stack direction='row' justifyContent='flex-end' alignItems='center' spacing={2} marginTop={2}>
-              <Button onClick={handleCloseModal}>Batal</Button>
-              <Button onClick={handleSave}>Simpan</Button>
+              <Button disabled={loading} onClick={handleCloseModal}>
+                Batal
+              </Button>
+              <Button disabled={loading} onClick={handleSave}>
+                {loading ? 'Menyimpan...' : 'Simpan'}
+              </Button>
             </Stack>
           </Box>
         </Fade>

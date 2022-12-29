@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Modal from '@mui/material/Modal'
 import Fade from '@mui/material/Fade'
 import Backdrop from '@mui/material/Backdrop'
@@ -5,6 +6,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
+import { useSnackbar } from 'notistack'
 
 import { useGaransi } from 'src/hooks/useGaransi'
 import { useModal } from 'src/hooks/useModal'
@@ -22,20 +24,35 @@ const style = {
 }
 
 const RemoveDataGaransiModal = ({ open }) => {
+  const snack = useSnackbar()
   const { removeData, removeBulkData } = useGaransi()
   const { closeModal, modalOpened } = useModal()
 
+  const [loading, setLoading] = useState(false)
+
   const handleCloseModal = () => {
+    if (loading) return
+
     closeModal()
   }
 
   const handleConfirm = async () => {
+    setLoading(true)
+
+    let isError
     if (typeof modalOpened === 'string') {
-      await removeData(modalOpened)
+      const [statusRemoveOne, errorRemoveOne] = await removeData(modalOpened)
+      if (errorRemoveOne) isError = true
     } else {
-      await removeBulkData(modalOpened)
+      const [statusRemoveBulk, errorRemoveBulk] = await removeBulkData(modalOpened)
+      if (errorRemoveBulk) isError = true
     }
 
+    setLoading(false)
+
+    if (isError) return snack.enqueueSnackbar('Hapus data garansi gagal', { variant: 'error' })
+
+    snack.enqueueSnackbar('Hapus data garansi berhasil', { variant: 'success' })
     handleCloseModal()
   }
 
@@ -55,8 +72,12 @@ const RemoveDataGaransiModal = ({ open }) => {
             </Box>
 
             <Stack direction='row' justifyContent='flex-end' alignItems='center' spacing={2} marginTop={2}>
-              <Button onClick={handleCloseModal}>Batal</Button>
-              <Button onClick={handleConfirm}>Hapus</Button>
+              <Button disabled={loading} onClick={handleCloseModal}>
+                Batal
+              </Button>
+              <Button disabled={loading} onClick={handleConfirm}>
+                Hapus
+              </Button>
             </Stack>
           </Box>
         </Fade>

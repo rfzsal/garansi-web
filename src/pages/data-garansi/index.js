@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
+import { useSnackbar } from 'notistack'
 
 import Plus from 'mdi-material-ui/Plus'
 import Import from 'mdi-material-ui/Import'
@@ -17,6 +18,7 @@ import ImportDataGaransi from 'src/views/data-garansi/modals/ImportDataGaransi'
 import AddDataGaransi from 'src/views/data-garansi/modals/AddDataGaransi'
 
 const DataGaransi = () => {
+  const snack = useSnackbar()
   const fullWidth = useMediaQuery(theme => theme.breakpoints.down('md'))
   const { data } = useGaransi()
   const { modalOpened, openModal } = useModal()
@@ -27,7 +29,8 @@ const DataGaransi = () => {
       rowsData.push([row.id, row.nama_produk, new Date(row.tanggal_mulai - 12000), new Date(row.tanggal_akhir - 12000)])
     })
 
-    exportFile(rowsData, 'data_garansi.xlsx')
+    const [status] = exportFile(rowsData, 'data_garansi.xlsx')
+    if (status) snack.enqueueSnackbar('Export data berhasil', { variant: 'success' })
   }
 
   return (
