@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
-import { useDialog } from 'src/hooks/useDialog'
+import { useModal } from 'src/hooks/useModal'
 
 const style = {
   position: 'absolute',
@@ -31,7 +31,7 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const AddDataGaransi = ({ open }) => {
-  const { closeDialog } = useDialog()
+  const { closeModal } = useModal()
 
   const [values, setValues] = useState({
     productName: '',
@@ -43,9 +43,9 @@ const AddDataGaransi = ({ open }) => {
     setValues({ ...values, [prop]: prop === 'productName' ? event.target.value : event })
   }
 
-  const handleDialogClose = () => {
+  const handleCloseModal = () => {
     setValues({ productName: '', startDate: '', endDate: '' })
-    closeDialog()
+    closeModal()
   }
 
   const handleSave = () => {
@@ -58,7 +58,7 @@ const AddDataGaransi = ({ open }) => {
     <>
       <Modal
         open={open}
-        onClose={handleDialogClose}
+        onClose={handleCloseModal}
         maxWidth='xs'
         fullWidth
         disableEnforceFocus
@@ -103,7 +103,7 @@ const AddDataGaransi = ({ open }) => {
             </Box>
 
             <Stack direction='row' justifyContent='flex-end' alignItems='center' spacing={2} marginTop={2}>
-              <Button onClick={handleDialogClose}>Batal</Button>
+              <Button onClick={handleCloseModal}>Batal</Button>
               <Button onClick={handleSave}>Simpan</Button>
             </Stack>
           </Box>

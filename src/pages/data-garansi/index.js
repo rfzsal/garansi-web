@@ -10,11 +10,11 @@ import Export from 'mdi-material-ui/Export'
 
 import { exportFile } from 'src/lib/excel'
 import { useGaransi } from 'src/hooks/useGaransi'
-import { useDialog } from 'src/hooks/useDialog'
+import { useModal } from 'src/hooks/useModal'
 import { withSessionSsr } from 'src/lib/session'
 import GaransiTable from 'src/views/data-garansi/GaransiTable'
-import ImportDataGaransi from 'src/views/data-garansi/dialogs/ImportDataGaransi'
-import AddDataGaransi from 'src/views/data-garansi/dialogs/AddDataGaransi'
+import ImportDataGaransi from 'src/views/data-garansi/modals/ImportDataGaransi'
+import AddDataGaransi from 'src/views/data-garansi/modals/AddDataGaransi'
 
 const createData = (id, name, startDate, endDate) => {
   return {
@@ -28,7 +28,7 @@ const createData = (id, name, startDate, endDate) => {
 const DataGaransi = () => {
   const fullWidth = useMediaQuery(theme => theme.breakpoints.down('md'))
   const { data } = useGaransi()
-  const { dialogOpened, openDialog } = useDialog()
+  const { modalOpened, openModal } = useModal()
 
   const rows = data.map(row => {
     return createData(row.id, row.nama_produk, row.tanggal_mulai, row.tanggal_akhir)
@@ -49,7 +49,7 @@ const DataGaransi = () => {
         <Grid item xs={12}>
           <Stack gap={2} direction={fullWidth ? 'column' : 'row'}>
             <Button
-              onClick={() => openDialog('AddDataGaransi')}
+              onClick={() => openModal('AddDataGaransi')}
               variant='contained'
               size='small'
               fullWidth={fullWidth}
@@ -58,7 +58,7 @@ const DataGaransi = () => {
               Tambah Data Garansi
             </Button>
             <Button
-              onClick={() => openDialog('ImportDataGaransi')}
+              onClick={() => openModal('ImportDataGaransi')}
               variant='contained'
               size='small'
               fullWidth={fullWidth}
@@ -85,8 +85,8 @@ const DataGaransi = () => {
         </Grid>
       </Grid>
 
-      <AddDataGaransi open={dialogOpened === 'AddDataGaransi'} />
-      <ImportDataGaransi open={dialogOpened === 'ImportDataGaransi'} />
+      <AddDataGaransi open={modalOpened === 'AddDataGaransi'} />
+      <ImportDataGaransi open={modalOpened === 'ImportDataGaransi'} />
     </>
   )
 }

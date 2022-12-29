@@ -29,7 +29,7 @@ import '../../styles/globals.css'
 
 // ** Custom Hook
 import { ProvideGaransi } from 'src/hooks/useGaransi'
-import { ProvideDialog } from 'src/hooks/useDialog'
+import { ProvideModal } from 'src/hooks/useModal'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -70,9 +70,9 @@ const App = props => {
           {({ settings }) => {
             return (
               <ThemeComponent settings={settings}>
-                <ProvideDialog>
+                <ProvideModal>
                   <ProvideGaransi>{getLayout(<Component {...pageProps} />)}</ProvideGaransi>
-                </ProvideDialog>
+                </ProvideModal>
               </ThemeComponent>
             )
           }}

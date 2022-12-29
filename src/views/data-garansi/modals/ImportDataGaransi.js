@@ -11,13 +11,13 @@ import Link from '@mui/material/Link'
 
 import Import from 'mdi-material-ui/Import'
 
-import { useDialog } from 'src/hooks/useDialog'
+import { useModal } from 'src/hooks/useModal'
 import { exportFile, readFile } from 'src/lib/excel'
 import { useGaransi } from 'src/hooks/useGaransi'
 
 const ImportDataGaransi = ({ open }) => {
   const { importData } = useGaransi()
-  const { closeDialog } = useDialog()
+  const { closeModal } = useModal()
   const [file, setFile] = useState(null)
 
   const inputRef = useRef(null)
@@ -36,7 +36,7 @@ const ImportDataGaransi = ({ open }) => {
 
     await importData(data)
 
-    handleDialogClose()
+    handleCloseModal()
   }
 
   const handleGetTemplate = event => {
@@ -47,14 +47,14 @@ const ImportDataGaransi = ({ open }) => {
     exportFile(rowsData, 'template_data_garansi.xlsx')
   }
 
-  const handleDialogClose = () => {
+  const handleCloseModal = () => {
     setFile(null)
-    closeDialog()
+    closeModal()
   }
 
   return (
     <>
-      <Dialog open={open} onClose={handleDialogClose} maxWidth='xs' fullWidth>
+      <Dialog open={open} onClose={handleCloseModal} maxWidth='xs' fullWidth>
         <DialogTitle>Import Data Garansi</DialogTitle>
 
         <DialogContent>
@@ -77,7 +77,7 @@ const ImportDataGaransi = ({ open }) => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleDialogClose}>Batal</Button>
+          <Button onClick={handleCloseModal}>Batal</Button>
           <Button onClick={handleImport}>Import</Button>
         </DialogActions>
       </Dialog>
