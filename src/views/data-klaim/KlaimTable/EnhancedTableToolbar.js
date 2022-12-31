@@ -62,7 +62,7 @@ const EnhancedTableToolbar = props => {
       <Grid container spacing={2} sx={selected.length > 0 ? visuallyHidden : null}>
         <Grid item xs={12} sm={6}>
           <Typography variant='h6' component='div' marginTop={isSmall ? 4 : 0}>
-            Data Garansi
+            Data Klaim Garansi
           </Typography>
         </Grid>
 
