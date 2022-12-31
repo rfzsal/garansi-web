@@ -197,7 +197,7 @@ const KlaimTable = () => {
                     <TableCell align='left'>{row.name}</TableCell>
                     <TableCell align='left'>{row.idGaransi}</TableCell>
                     <TableCell align='left'>{row.status}</TableCell>
-                    <TableCell align='center'>{formatDate(row.klaimDate, 'hh:mm - dd MMMM yyyy')}</TableCell>
+                    <TableCell align='center'>{formatDate(row.klaimDate)}</TableCell>
                     <TableCell align='right'>
                       <Box sx={{ mr: -2 }}>
                         <Tooltip title='Detail'>
