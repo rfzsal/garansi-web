@@ -9,6 +9,7 @@ import Stack from '@mui/material/Stack'
 import { useSnackbar } from 'notistack'
 
 import { useModal } from 'src/hooks/useModal'
+import { useKlaim } from 'src/hooks/useKlaim'
 
 const style = {
   position: 'absolute',
@@ -26,7 +27,8 @@ const style = {
 
 const KlaimConfirmation = ({ open }) => {
   const snack = useSnackbar()
-  const { closeModal, modalOpened } = useModal()
+  const { updateStatus } = useKlaim()
+  const { openModal, closeModal, modalOpened } = useModal()
 
   const [loading, setLoading] = useState(false)
 
@@ -38,12 +40,21 @@ const KlaimConfirmation = ({ open }) => {
     closeModal()
   }
 
-  const handleSave = async () => {}
+  const handleSave = async () => {
+    setLoading(true)
+
+    const [status, error] = await updateStatus(modalOpened.data.id, 'Dalam proses pengecekan')
+    if (error) return snack.enqueueSnackbar('Terjadi kesalahan', { variant: 'error' })
+
+    setLoading(false)
+
+    openModal({ name: 'DetailDataKlaim', data: { ...modalOpened.data, status: 'Dalam proses pengecekan' } })
+  }
 
   useEffect(() => {
     if (modalOpened.name !== 'KlaimConfirmation') return
 
-    idGaransi.current = modalOpened.data.id
+    idGaransi.current = modalOpened.data.idGaransi
   }, [modalOpened])
 
   return (
@@ -60,7 +71,7 @@ const KlaimConfirmation = ({ open }) => {
                 <Typography variant='body1' component='p'>
                   Pastikan produk dengan no. seri{' '}
                   <Typography variant='body1' component='span' sx={{ fontWeight: 'bold' }}>
-                    {idGaransi.current}
+                    {modalOpened.data?.idGaransi || idGaransi.current}
                   </Typography>{' '}
                   sudah diterima.
                 </Typography>

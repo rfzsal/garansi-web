@@ -43,11 +43,22 @@ const useProvideKlaim = () => {
       })
   }
 
+  const updateStatus = async (id, status) => {
+    try {
+      await axios.put(`/api/klaim/update-status?id=${id}`, { status })
+      refresh()
+
+      return [true, null]
+    } catch (error) {
+      return [null, error]
+    }
+  }
+
   useEffect(() => {
     refresh()
   }, [])
 
-  return { loading, error, data, refresh }
+  return { loading, error, data, refresh, updateStatus }
 }
 
 export { ProvideKlaim, useKlaim }
