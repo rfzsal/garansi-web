@@ -174,12 +174,9 @@ const KlaimTable = () => {
           <Table sx={{ minWidth: 750 }} size={'medium'}>
             <EnhancedTableHead
               headCells={headCells}
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={currentVisibleRow.length}
             />
 
             <TableBody>
@@ -188,9 +185,6 @@ const KlaimTable = () => {
 
                 return (
                   <TableRow hover tabIndex={-1} key={row.id} selected={isItemSelected}>
-                    <TableCell onClick={event => handleClick(event, row.id)} padding='checkbox'>
-                      <Checkbox color='primary' checked={isItemSelected} sx={{ ml: -3 }} />
-                    </TableCell>
                     <TableCell component='th' scope='row' padding='none'>
                       {row.id}
                     </TableCell>
