@@ -17,6 +17,7 @@ import EnhancedTableHead from './EnhancedTableHead'
 import EnhancedTableToolbar from './EnhancedTableToolbar'
 import { useModal } from 'src/hooks/useModal'
 import DetailKlaimGaransi from '../modals/DetailDataKlaim'
+import KlaimConfirmation from '../modals/KlaimConfirmation'
 
 const headCells = [
   {
@@ -130,7 +131,11 @@ const KlaimTable = () => {
   }
 
   const handleDetailModal = row => () => {
-    openModal({ name: 'DetailDataKlaim', data: row })
+    if (row.status === 'Dalam proses pengajuan') {
+      openModal({ name: 'KlaimConfirmation', data: row })
+    } else {
+      openModal({ name: 'DetailDataKlaim', data: row })
+    }
   }
 
   const isSelected = id => selected.indexOf(id) !== -1
@@ -220,6 +225,8 @@ const KlaimTable = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
+
+      <KlaimConfirmation open={modalOpened.name === 'KlaimConfirmation'} />
 
       <DetailKlaimGaransi open={modalOpened.name === 'DetailDataKlaim'} />
     </>

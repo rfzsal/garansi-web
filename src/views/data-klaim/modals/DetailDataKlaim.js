@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Modal from '@mui/material/Modal'
 import Fade from '@mui/material/Fade'
 import Backdrop from '@mui/material/Backdrop'
@@ -48,6 +48,8 @@ const DetailKlaimGaransi = ({ open }) => {
     responseStatus: '',
     responseDetail: ''
   })
+
+  const idGaransi = useRef(modalOpened.data?.idGaransi)
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
