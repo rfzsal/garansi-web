@@ -23,7 +23,7 @@ const navigation = () => {
     {
       title: 'Klaim Garansi',
       icon: FileDocumentOutline,
-      path: '/klaim-garansi'
+      path: '/data-klaim'
     },
     {
       sectionTitle: 'Pengguna'
