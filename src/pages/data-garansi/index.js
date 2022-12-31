@@ -4,6 +4,7 @@ import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import { useSnackbar } from 'notistack'
+import { startOfDay, subSeconds } from 'date-fns'
 
 import Plus from 'mdi-material-ui/Plus'
 import Import from 'mdi-material-ui/Import'
@@ -27,7 +28,12 @@ const DataGaransi = () => {
   const handleExport = () => {
     const rowsData = [['id', 'nama_produk', 'tanggal_mulai', 'tanggal_akhir']]
     data.forEach(row => {
-      rowsData.push([row.id, row.nama_produk, new Date(row.tanggal_mulai - 12000), new Date(row.tanggal_akhir - 12000)])
+      rowsData.push([
+        row.id,
+        row.nama_produk,
+        subSeconds(startOfDay(row.tanggal_mulai), 12),
+        subSeconds(startOfDay(row.tanggal_akhir), 12)
+      ])
     })
 
     const [status] = exportFile(rowsData, 'data_garansi.xlsx')
