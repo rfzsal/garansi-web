@@ -32,6 +32,7 @@ import '../../styles/globals.css'
 
 // ** Custom Hook
 import { ProvideGaransi } from 'src/hooks/useGaransi'
+import { ProvideKlaim } from 'src/hooks/useKlaim'
 import { ProvideModal } from 'src/hooks/useModal'
 
 const clientSideEmotionCache = createEmotionCache()
@@ -75,7 +76,9 @@ const App = props => {
               <ThemeComponent settings={settings}>
                 <SnackbarProvider maxSnack={1}>
                   <ProvideModal>
-                    <ProvideGaransi>{getLayout(<Component {...pageProps} />)}</ProvideGaransi>
+                    <ProvideGaransi>
+                      <ProvideKlaim>{getLayout(<Component {...pageProps} />)}</ProvideKlaim>
+                    </ProvideGaransi>
                   </ProvideModal>
                 </SnackbarProvider>
               </ThemeComponent>
