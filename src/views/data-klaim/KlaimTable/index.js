@@ -15,6 +15,8 @@ import { formatDate } from 'src/lib/date'
 import { useKlaim } from 'src/hooks/useKlaim'
 import EnhancedTableHead from './EnhancedTableHead'
 import EnhancedTableToolbar from './EnhancedTableToolbar'
+import { useModal } from 'src/hooks/useModal'
+import DetailKlaimGaransi from '../modals/DetailDataKlaim'
 
 const headCells = [
   {
@@ -72,18 +74,20 @@ const getComparator = (order, orderBy) => {
     : (a, b) => -descendingComparator(a, b, orderBy)
 }
 
-const createData = (id, name, idGaransi, status, klaimDate) => {
+const createData = (id, name, idGaransi, status, klaimDate, rest) => {
   return {
     id,
     name,
     idGaransi,
     status,
-    klaimDate
+    klaimDate,
+    ...rest
   }
 }
 
 const KlaimTable = () => {
   const { data } = useKlaim()
+  const { openModal, modalOpened } = useModal()
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState('klaimDate')
   const [selected, setSelected] = useState([])
@@ -93,7 +97,7 @@ const KlaimTable = () => {
   const [filteredRow, setFilteredRow] = useState([])
 
   const rows = filteredRow.map(row => {
-    return createData(row.id, row.nama_produk, row.id_garansi, row.status, row.tanggal_klaim)
+    return createData(row.id, row.nama_produk, row.id_garansi, row.status, row.tanggal_klaim, row)
   })
 
   const currentVisibleRow = rows
@@ -123,6 +127,10 @@ const KlaimTable = () => {
     setSelected([])
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
+  }
+
+  const handleDetailModal = row => () => {
+    openModal({ name: 'DetailDataKlaim', data: row })
   }
 
   const isSelected = id => selected.indexOf(id) !== -1
@@ -167,7 +175,7 @@ const KlaimTable = () => {
                     <TableCell align='right'>
                       <Box sx={{ mr: -2 }}>
                         <Tooltip title='Detail'>
-                          <IconButton disabled={selected.length > 0}>
+                          <IconButton disabled={selected.length > 0} onClick={handleDetailModal(row)}>
                             <Magnify />
                           </IconButton>
                         </Tooltip>
@@ -212,6 +220,8 @@ const KlaimTable = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
+
+      <DetailKlaimGaransi open={modalOpened.name === 'DetailDataKlaim'} />
     </>
   )
 }
