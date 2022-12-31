@@ -6,7 +6,6 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
-import Checkbox from '@mui/material/Checkbox'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
@@ -21,7 +20,7 @@ const headCells = [
   {
     id: 'id',
     align: 'left',
-    disablePadding: true,
+    disablePadding: false,
     label: 'No. Klaim'
   },
   {
@@ -115,33 +114,6 @@ const KlaimTable = () => {
     setOrderBy(property)
   }
 
-  const handleSelectAllClick = event => {
-    if (event.target.checked) {
-      const newSelected = currentVisibleRow.map(n => n.id)
-      setSelected(newSelected)
-
-      return
-    }
-    setSelected([])
-  }
-
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id)
-    let newSelected = []
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
-    }
-
-    setSelected(newSelected)
-  }
-
   const handleChangePage = (event, newPage) => {
     setSelected([])
     setPage(newPage)
@@ -185,7 +157,7 @@ const KlaimTable = () => {
 
                 return (
                   <TableRow hover tabIndex={-1} key={row.id} selected={isItemSelected}>
-                    <TableCell component='th' scope='row' padding='none'>
+                    <TableCell component='th' scope='row'>
                       {row.id}
                     </TableCell>
                     <TableCell align='left'>{row.name}</TableCell>
