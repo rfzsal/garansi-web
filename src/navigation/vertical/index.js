@@ -4,6 +4,7 @@ import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import ArchiveOutline from 'mdi-material-ui/ArchiveOutline'
 import FileDocumentOutline from 'mdi-material-ui/FileDocumentOutline'
+import History from 'mdi-material-ui/History'
 
 const navigation = () => {
   return [
@@ -21,9 +22,17 @@ const navigation = () => {
       path: '/data-garansi'
     },
     {
+      sectionTitle: 'Klaim Garansi'
+    },
+    {
       title: 'Klaim Garansi',
       icon: FileDocumentOutline,
       path: '/data-klaim'
+    },
+    {
+      title: 'Riwayat Klaim Garansi',
+      icon: History,
+      path: '/riwayat-klaim'
     },
     {
       sectionTitle: 'Pengguna'
