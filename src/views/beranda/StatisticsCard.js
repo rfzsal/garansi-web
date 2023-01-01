@@ -10,29 +10,10 @@ import CellphoneLink from 'mdi-material-ui/CellphoneLink'
 import CheckboxOutline from 'mdi-material-ui/CheckboxOutline'
 import ChartBar from 'mdi-material-ui/ChartBar'
 
-const salesData = [
-  {
-    stats: '2',
-    title: 'Sudah Diproses',
-    color: 'success',
-    icon: <CheckboxOutline sx={{ fontSize: '1.75rem' }} />
-  },
-  {
-    stats: '1',
-    color: 'warning',
-    title: 'Belum Diproses',
-    icon: <CellphoneLink sx={{ fontSize: '1.75rem' }} />
-  },
-  {
-    stats: '3',
-    color: 'info',
-    title: 'Total Keseluruhan',
-    icon: <ChartBar sx={{ fontSize: '1.75rem' }} />
-  }
-]
+import { useKlaim } from 'src/hooks/useKlaim'
 
-const renderStats = () => {
-  return salesData.map((item, index) => (
+const renderStats = data => {
+  return data.map((item, index) => (
     <Grid item xs={12} sm={4} key={index}>
       <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar
@@ -58,6 +39,42 @@ const renderStats = () => {
 }
 
 const StatisticsCard = () => {
+  const { data } = useKlaim()
+
+  const statsValue = {
+    complete: 0,
+    onProgress: 0
+  }
+
+  data.forEach(row => {
+    if (row.status === 'Klaim ditolak' || row.status === 'Klaim diterima') {
+      statsValue.complete++
+    } else {
+      statsValue.onProgress++
+    }
+  })
+
+  const salesData = [
+    {
+      stats: statsValue.complete,
+      title: 'Sudah Diproses',
+      color: 'success',
+      icon: <CheckboxOutline sx={{ fontSize: '1.75rem' }} />
+    },
+    {
+      stats: statsValue.onProgress,
+      color: 'warning',
+      title: 'Belum Diproses',
+      icon: <CellphoneLink sx={{ fontSize: '1.75rem' }} />
+    },
+    {
+      stats: statsValue.complete + statsValue.onProgress,
+      color: 'info',
+      title: 'Total Keseluruhan',
+      icon: <ChartBar sx={{ fontSize: '1.75rem' }} />
+    }
+  ]
+
   return (
     <Card>
       <CardHeader
@@ -74,7 +91,7 @@ const StatisticsCard = () => {
 
       <CardContent sx={{ pt: theme => `${theme.spacing(3)} !important` }}>
         <Grid container spacing={[5, 0]}>
-          {renderStats()}
+          {renderStats(salesData)}
         </Grid>
       </CardContent>
     </Card>
