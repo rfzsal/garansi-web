@@ -1,121 +1,87 @@
-// ** MUI Imports
-import Grid from '@mui/material/Grid'
+import { useState } from 'react'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import CardContent from '@mui/material/CardContent'
+import Card from '@mui/material/Card'
+import BlankLayout from 'src/@core/layouts/BlankLayout'
+import FooterIllustrationsV1 from 'src/views/home/FooterIllustration'
+import { Container } from '@mui/material'
 
-// ** Icons Imports
-import Poll from 'mdi-material-ui/Poll'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
-import BriefcaseVariantOutline from 'mdi-material-ui/BriefcaseVariantOutline'
+import TableBasic from 'src/views/tables/TableBasic'
+import TableCollapsible from 'src/views/tables/TableCollapsible'
 
-// ** Custom Components Imports
-import CardStatisticsVerticalComponent from 'src/@core/components/card-statistics/card-stats-vertical'
+const Home = () => {
+  const [values, setValues] = useState({
+    idGaransi: '',
+    loading: false
+  })
 
-// ** Styled Component Import
-import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
+  const handleChange = prop => event => {
+    setValues({ ...values, [prop]: event.target.value })
+  }
 
-// ** Demo Components Imports
-import Table from 'src/views/dashboard/Table'
-import Trophy from 'src/views/dashboard/Trophy'
-import TotalEarning from 'src/views/dashboard/TotalEarning'
-import StatisticsCard from 'src/views/dashboard/StatisticsCard'
-import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
-import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
-import SalesByCountries from 'src/views/dashboard/SalesByCountries'
-
-import { withSessionSsr } from 'src/lib/session'
-
-const Dashboard = () => {
   return (
-    <ApexChartWrapper>
-      <Grid container spacing={6}>
-        <Grid item xs={12} md={4}>
-          <Trophy />
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <StatisticsCard />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <WeeklyOverview />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <TotalEarning />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <Grid container spacing={6}>
-            <Grid item xs={6}>
-              <CardStatisticsVerticalComponent
-                stats='$25.6k'
-                icon={<Poll />}
-                color='success'
-                trendNumber='+42%'
-                title='Total Profit'
-                subtitle='Weekly Profit'
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <CardStatisticsVerticalComponent
-                stats='$78'
-                title='Refunds'
-                trend='negative'
-                color='secondary'
-                trendNumber='-15%'
-                subtitle='Past Month'
-                icon={<CurrencyUsd />}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <CardStatisticsVerticalComponent
-                stats='862'
-                trend='negative'
-                trendNumber='-18%'
-                title='New Project'
-                subtitle='Yearly Project'
-                icon={<BriefcaseVariantOutline />}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <CardStatisticsVerticalComponent
-                stats='15'
-                color='warning'
-                trend='negative'
-                trendNumber='-18%'
-                subtitle='Last Week'
-                title='Sales Queries'
-                icon={<HelpCircleOutline />}
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <SalesByCountries />
-        </Grid>
-        <Grid item xs={12} md={12} lg={8}>
-          <DepositWithdraw />
-        </Grid>
-        <Grid item xs={12}>
-          <Table />
-        </Grid>
-      </Grid>
-    </ApexChartWrapper>
+    <>
+      <Container maxWidth='md' sx={{ py: 10 }}>
+        <Card sx={{ zIndex: 1 }}>
+          <CardContent sx={{ padding: theme => `${theme.spacing(7, 7, 7)} !important` }}>
+            <Box sx={{ mb: 6 }}>
+              <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
+                Cek Status Garansi 🔎
+              </Typography>
+              <Typography variant='body2'>Cek status garansi dengan nomor komponen</Typography>
+            </Box>
+
+            <TextField
+              autoFocus
+              fullWidth
+              label='No. Serial Komponen'
+              placeholder='000000000'
+              sx={{ marginBottom: 5 }}
+            />
+
+            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 3 }}>
+              Cek Status
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card sx={{ mt: 5, zIndex: 1 }}>
+          <CardContent sx={{ padding: theme => `${theme.spacing(7, 7, 7)} !important` }}>
+            <Box sx={{ mb: 6 }}>
+              <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
+                Status Garansi
+              </Typography>
+            </Box>
+            <Box>
+              <TableBasic />
+            </Box>
+            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 3, mt: 7 }}>
+              Klaim Garansi
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card sx={{ mt: 5, zIndex: 1 }}>
+          <CardContent sx={{ padding: theme => `${theme.spacing(7, 7, 7)} !important` }}>
+            <Box sx={{ mb: 6 }}>
+              <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
+                Riwayat Klaim Garansi
+              </Typography>
+            </Box>
+            <Box>
+              <TableCollapsible />
+            </Box>
+          </CardContent>
+        </Card>
+      </Container>
+
+      <FooterIllustrationsV1 />
+    </>
   )
 }
+Home.getLayout = page => <BlankLayout>{page}</BlankLayout>
 
-export const getServerSideProps = withSessionSsr(async function getServerSideProps({ req }) {
-  const user = req.session.user
-
-  if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/masuk'
-      },
-      props: {}
-    }
-  }
-
-  return {
-    props: { user: req.session.user }
-  }
-})
-
-export default Dashboard
+export default Home
