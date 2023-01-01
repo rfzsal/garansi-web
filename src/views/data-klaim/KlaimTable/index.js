@@ -143,10 +143,7 @@ const KlaimTable = () => {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   useEffect(() => {
-    if (data.length > 0) {
-      const klaimActive = data.filter(row => row.status !== 'Klaim ditolak' && row.status !== 'Klaim diterima')
-      setFilteredRow(klaimActive)
-    }
+    setFilteredRow(data)
   }, [data])
 
   useEffect(() => {
