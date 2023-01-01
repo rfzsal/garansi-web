@@ -13,6 +13,7 @@ import { styled } from '@mui/material/styles'
 import MuiCard from '@mui/material/Card'
 import InputAdornment from '@mui/material/InputAdornment'
 import axios from 'axios'
+import { useSnackbar } from 'notistack'
 
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
@@ -27,6 +28,8 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }))
 
 const Masuk = () => {
+  const snack = useSnackbar()
+
   const [values, setValues] = useState({
     username: '',
     password: '',
@@ -49,15 +52,17 @@ const Masuk = () => {
   }
 
   const handleLogin = () => {
+    if (!values.username || !values.password) return
+
     setValues({ ...values, loading: true })
 
     axios
       .post('/api/auth/login', { username: values.username, password: values.password })
       .then(res => {
-        if (res.data) router.replace('/')
+        if (res.data) router.replace('/beranda')
       })
       .catch(error => {
-        return error
+        return snack.enqueueSnackbar('Nama User atau Kata Sandi salah', { variant: 'error' })
       })
       .finally(() => {
         setValues({ ...values, loading: false })
@@ -76,6 +81,7 @@ const Masuk = () => {
 
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
             <TextField
+              disabled={values.loading}
               value={values.username}
               onChange={handleChange('username')}
               autoFocus
@@ -87,6 +93,7 @@ const Masuk = () => {
             <FormControl fullWidth>
               <InputLabel>Kata Sandi</InputLabel>
               <OutlinedInput
+                disabled={values.loading}
                 label='Kata Sandi'
                 value={values.password}
                 onChange={handleChange('password')}
@@ -101,8 +108,15 @@ const Masuk = () => {
               />
             </FormControl>
 
-            <Button fullWidth size='large' variant='contained' sx={{ marginTop: 4 }} onClick={handleLogin}>
-              Masuk
+            <Button
+              disabled={values.loading}
+              fullWidth
+              size='large'
+              variant='contained'
+              sx={{ marginTop: 4 }}
+              onClick={handleLogin}
+            >
+              {values.loading ? 'Masuk...' : 'Masuk'}
             </Button>
           </form>
         </CardContent>
@@ -121,7 +135,7 @@ export const getServerSideProps = withSessionSsr(async function getServerSidePro
     return {
       redirect: {
         permanent: false,
-        destination: '/'
+        destination: '/beranda'
       },
       props: {
         user: req.session.user
