@@ -5,11 +5,13 @@ import Backdrop from '@mui/material/Backdrop'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import DatePicker from 'react-datepicker'
+import DatePicker, { registerLocale } from 'react-datepicker'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
-import { isDate } from 'date-fns'
+import { id } from 'date-fns/locale'
 import { useSnackbar } from 'notistack'
+
+registerLocale('id', id)
 
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -49,7 +51,7 @@ const AddDataGaransi = ({ open }) => {
   })
 
   const handleChange = prop => event => {
-    if (isDate(event)) {
+    if (prop === 'startDate' || prop === 'endDate') {
       setValues({ ...values, [prop]: event })
     } else {
       setValues({ ...values, [prop]: event.target.value })
@@ -115,21 +117,25 @@ const AddDataGaransi = ({ open }) => {
 
               <DatePickerWrapper>
                 <DatePicker
+                  locale='id'
+                  dateFormat='dd MMMM yyyy'
                   disabled={loading}
                   selected={values.startDate}
                   showYearDropdown
                   showMonthDropdown
-                  placeholderText='MM-DD-YYYY'
+                  placeholderText='DD-MM-YYYY'
                   customInput={<CustomInput margin='normal' label='Tanggal Mulai' />}
                   onChange={handleChange('startDate')}
                 />
 
                 <DatePicker
+                  locale='id'
+                  dateFormat='dd MMMM yyyy'
                   disabled={loading}
                   selected={values.endDate}
                   showYearDropdown
                   showMonthDropdown
-                  placeholderText='MM-DD-YYYY'
+                  placeholderText='DD-MM-YYYY'
                   customInput={<CustomInput margin='normal' label='Tanggal Akhir' />}
                   onChange={handleChange('endDate')}
                 />
