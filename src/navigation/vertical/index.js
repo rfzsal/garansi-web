@@ -11,7 +11,7 @@ const navigation = () => {
     {
       title: 'Beranda',
       icon: HomeOutline,
-      path: '/'
+      path: '/beranda'
     },
     {
       sectionTitle: 'Garansi'
