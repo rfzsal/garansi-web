@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -10,8 +9,6 @@ import CardContent from '@mui/material/CardContent'
 import CellphoneLink from 'mdi-material-ui/CellphoneLink'
 import CheckboxOutline from 'mdi-material-ui/CheckboxOutline'
 import ChartBar from 'mdi-material-ui/ChartBar'
-
-import { useKlaim } from 'src/hooks/useKlaim'
 
 const renderStats = data => {
   return data.map((item, index) => (
@@ -39,12 +36,7 @@ const renderStats = data => {
   ))
 }
 
-const StatisticsCard = () => {
-  const { getThisMonth } = useKlaim()
-
-  const [loading, setLoading] = useState(false)
-  const [data, setData] = useState([])
-
+const StatisticsCard = ({ data }) => {
   const statsValue = {
     complete: 0,
     onProgress: 0
@@ -78,38 +70,6 @@ const StatisticsCard = () => {
       icon: <ChartBar sx={{ fontSize: '1.75rem' }} />
     }
   ]
-
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true)
-      const [newData] = await getThisMonth()
-      setLoading(false)
-
-      if (newData) {
-        setData(newData)
-      }
-    }
-
-    getData()
-  }, [getThisMonth])
-
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true)
-      const [newData] = await getThisMonth()
-      setLoading(false)
-
-      if (newData) {
-        setData(newData)
-      }
-    }
-
-    const loop = setInterval(() => {
-      if (!loading) getData()
-    }, 5000)
-
-    return () => clearInterval(loop)
-  }, [getThisMonth, loading])
 
   return (
     <Card>
