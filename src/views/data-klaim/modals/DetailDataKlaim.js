@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Modal from '@mui/material/Modal'
 import Fade from '@mui/material/Fade'
 import Backdrop from '@mui/material/Backdrop'
@@ -13,8 +13,10 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
+import { formatDate } from 'src/lib/date'
 
 import { useModal } from 'src/hooks/useModal'
+import { useKlaim } from 'src/hooks/useKlaim'
 
 const style = {
   position: 'absolute',
@@ -32,6 +34,7 @@ const style = {
 
 const DetailKlaimGaransi = ({ open }) => {
   const snack = useSnackbar()
+  const { updateStatus } = useKlaim()
   const { closeModal, modalOpened } = useModal()
 
   const [loading, setLoading] = useState(false)
@@ -48,8 +51,6 @@ const DetailKlaimGaransi = ({ open }) => {
     responseStatus: '',
     responseDetail: ''
   })
-
-  const idGaransi = useRef(modalOpened.data?.idGaransi)
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -73,7 +74,22 @@ const DetailKlaimGaransi = ({ open }) => {
     closeModal()
   }
 
-  const handleSave = async () => {}
+  const handleSave = async () => {
+    if (!values.responseStatus || !values.responseDetail) return
+
+    setLoading(true)
+
+    const [status, error] = await updateStatus(modalOpened.data.id, {
+      status: values.responseStatus,
+      details: values.responseDetail
+    })
+    if (error) return snack.enqueueSnackbar('Terjadi kesalahan', { variant: 'error' })
+
+    setLoading(false)
+
+    snack.enqueueSnackbar('Simpan status klaim berhasil', { variant: 'success' })
+    handleCloseModal()
+  }
 
   useEffect(() => {
     if (modalOpened.name !== 'DetailDataKlaim') return
@@ -82,8 +98,8 @@ const DetailKlaimGaransi = ({ open }) => {
       id: modalOpened.data.id,
       name: modalOpened.data.name,
       idGaransi: modalOpened.data.idGaransi,
-      klaimDate: modalOpened.data.klaimDate,
-      endDate: modalOpened.data.tanggal_akhir,
+      klaimDate: formatDate(modalOpened.data.klaimDate),
+      endDate: formatDate(modalOpened.data.tanggal_akhir),
       phoneNumber: modalOpened.data.no_telepon,
       detail: modalOpened.data.keterangan,
       status: modalOpened.data.status,
@@ -102,42 +118,72 @@ const DetailKlaimGaransi = ({ open }) => {
             </Typography>
 
             <Box sx={{ mt: 2 }}>
-              <TextField margin='normal' value={values.id} label='ID Klaim' fullWidth />
-
-              <TextField multiline margin='normal' value={values.name} label='Nama Produk' fullWidth />
-
-              <TextField margin='normal' value={values.idGaransi} label='No. Seri' fullWidth />
-
-              <TextField margin='normal' value={values.klaimDate} label='Tanggal Klaim' fullWidth />
-
-              <TextField margin='normal' value={values.endDate} label='Tanggal Akhir' fullWidth />
-
-              <TextField margin='normal' value={values.status} label='Status' fullWidth />
-
-              <TextField margin='normal' value={values.detail} label='Keterangan' multiline fullWidth />
-
-              <TextField margin='normal' value={values.phoneNumber} label='Kontak Pengguna' fullWidth />
-
-              <Box sx={{ mb: 5 }}>
-                <Divider>Respon Klaim</Divider>
-              </Box>
-
-              <FormControl fullWidth>
-                <InputLabel>Tindakan</InputLabel>
-                <Select value={values.responseStatus} label='Tindakan' onChange={handleChange('responseStatus')}>
-                  <MenuItem value='Terima'>Terima Klaim</MenuItem>
-                  <MenuItem value='Tolak'>Tolak Klaim</MenuItem>
-                </Select>
-              </FormControl>
+              <TextField disabled={loading} margin='normal' value={values.id} label='ID Klaim' fullWidth />
 
               <TextField
-                values={values.responseDetail}
+                disabled={loading}
+                multiline
                 margin='normal'
+                value={values.name}
+                label='Nama Produk'
+                fullWidth
+              />
+
+              <TextField disabled={loading} margin='normal' value={values.idGaransi} label='No. Seri' fullWidth />
+
+              <TextField disabled={loading} margin='normal' value={values.klaimDate} label='Tanggal Klaim' fullWidth />
+
+              <TextField disabled={loading} margin='normal' value={values.endDate} label='Tanggal Akhir' fullWidth />
+
+              <TextField disabled={loading} margin='normal' value={values.status} label='Status' fullWidth />
+
+              <TextField
+                disabled={loading}
+                margin='normal'
+                value={values.detail}
                 label='Keterangan'
                 multiline
                 fullWidth
-                onChange={handleChange('responseDetail')}
               />
+
+              <TextField
+                disabled={loading}
+                margin='normal'
+                value={values.phoneNumber}
+                label='Kontak Pengguna'
+                fullWidth
+              />
+
+              {!values.status.includes('ditolak') && !values.status.includes('diterima') && (
+                <>
+                  <Box sx={{ mb: 5 }}>
+                    <Divider>Respon Klaim</Divider>
+                  </Box>
+
+                  <FormControl fullWidth>
+                    <InputLabel>Tindakan</InputLabel>
+                    <Select
+                      disabled={loading}
+                      value={values.responseStatus}
+                      label='Tindakan'
+                      onChange={handleChange('responseStatus')}
+                    >
+                      <MenuItem value='Klaim diterima'>Terima Klaim</MenuItem>
+                      <MenuItem value='Klaim ditolak'>Tolak Klaim</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  <TextField
+                    disabled={loading}
+                    values={values.responseDetail}
+                    margin='normal'
+                    label='Keterangan'
+                    multiline
+                    fullWidth
+                    onChange={handleChange('responseDetail')}
+                  />
+                </>
+              )}
             </Box>
 
             <Stack direction='row' justifyContent='flex-end' alignItems='center' spacing={2} marginTop={2}>

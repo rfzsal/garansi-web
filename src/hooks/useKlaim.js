@@ -43,9 +43,9 @@ const useProvideKlaim = () => {
       })
   }
 
-  const updateStatus = async (id, status) => {
+  const updateStatus = async (id, data) => {
     try {
-      await axios.put(`/api/klaim/update-status?id=${id}`, { status })
+      await axios.put(`/api/klaim/update-status?id=${id}`, data)
       refresh()
 
       return [true, null]

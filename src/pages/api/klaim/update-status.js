@@ -11,14 +11,14 @@ const handler = async (req, res) => {
 
   if (!req.query.id) return res.status(400).end()
 
-  const { status } = req.body
+  const { status, details } = req.body
 
   if (!status) return res.status(400).end()
 
   const [queryStatus1, error1] = await query(`UPDATE data_klaim SET status='${status}' WHERE id='${req.query.id}'`)
 
   const [queryStatus2, error2] = await query(
-    `INSERT INTO status_klaim VALUES (NULL, '${req.query.id}', '${status}', current_timestamp())`
+    `INSERT INTO status_klaim VALUES ('${req.query.id}', '${details || status}', current_timestamp())`
   )
 
   if (error1 || error2) {
