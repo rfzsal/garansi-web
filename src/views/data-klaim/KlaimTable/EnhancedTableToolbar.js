@@ -1,39 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import PropTypes from 'prop-types'
 import { alpha } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
 import TextField from '@mui/material/TextField'
 import Grid from '@mui/material/Grid'
 import { visuallyHidden } from '@mui/utils'
 
-import { useModal } from 'src/hooks/useModal'
-import { useGaransi } from 'src/hooks/useGaransi'
-import Delete from 'mdi-material-ui/Delete'
-
 const EnhancedTableToolbar = props => {
   const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'))
-  const { data } = useGaransi()
-  const { openModal } = useModal()
   const { selected, onSearch } = props
 
   const [searchValue, setSearchValue] = useState('')
-
-  const handleOpenDeleteModal = () => {
-    openModal(selected)
-  }
 
   const handleSearch = event => {
     setSearchValue(event.target.value)
     onSearch(event.target.value)
   }
-
-  useEffect(() => {
-    setSearchValue('')
-  }, [data])
 
   return (
     <Toolbar
@@ -50,12 +34,6 @@ const EnhancedTableToolbar = props => {
           <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
             {selected.length} terpilih
           </Typography>
-
-          <Tooltip title='Hapus'>
-            <IconButton onClick={handleOpenDeleteModal}>
-              <Delete />
-            </IconButton>
-          </Tooltip>
         </>
       )}
 

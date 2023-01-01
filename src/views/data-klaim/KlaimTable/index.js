@@ -86,8 +86,8 @@ const createData = (id, name, idGaransi, status, klaimDate, rest) => {
   }
 }
 
-const KlaimTable = () => {
-  const { data } = useKlaim()
+const KlaimTable = ({ realtime }) => {
+  const { loading, data, refresh } = useKlaim()
   const { openModal, modalOpened } = useModal()
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState('klaimDate')
@@ -95,6 +95,7 @@ const KlaimTable = () => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
+  const [keyword, setKeyword] = useState('')
   const [filteredRow, setFilteredRow] = useState([])
 
   const rows = filteredRow.map(row => {
@@ -104,14 +105,15 @@ const KlaimTable = () => {
   const currentVisibleRow = rows
     .sort(getComparator(order, orderBy))
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    .filter(row => row.status !== 'Klaim ditolak' && row.status !== 'Klaim diterima')
+    .filter(row => {
+      const isActive = row.status !== 'Klaim ditolak' && row.status !== 'Klaim diterima'
+      const isSearchFound = row.id.indexOf(keyword) !== -1
 
-  const handleSearch = keyword => {
-    if (keyword.trim() === '') return setFilteredRow(data)
+      return isActive && isSearchFound
+    })
 
-    const newFilteredRow = data.filter(row => row.id.indexOf(keyword) !== -1)
-
-    setFilteredRow(newFilteredRow)
+  const handleSearch = newKeyword => {
+    setKeyword(newKeyword)
   }
 
   const handleRequestSort = (event, property) => {
@@ -148,8 +150,14 @@ const KlaimTable = () => {
   }, [data])
 
   useEffect(() => {
-    setSelected([])
-  }, [data])
+    if (!realtime) return
+
+    const loop = setInterval(() => {
+      if (!loading) refresh()
+    }, 5000)
+
+    return () => clearInterval(loop)
+  }, [loading, refresh, realtime])
 
   return (
     <>

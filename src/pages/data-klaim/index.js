@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -6,30 +7,36 @@ import Stack from '@mui/material/Stack'
 
 import Refresh from 'mdi-material-ui/Refresh'
 
-import { useKlaim } from 'src/hooks/useKlaim'
 import { withSessionSsr } from 'src/lib/session'
 import KlaimTable from 'src/views/data-klaim/KlaimTable'
-import { useModal } from 'src/hooks/useModal'
 
 const DataKlaim = () => {
-  const { refresh } = useKlaim()
-  const { openModal, modalOpened } = useModal()
+  const [realtime, setRealtime] = useState(false)
   const fullWidth = useMediaQuery(theme => theme.breakpoints.down('lg'))
+
+  const toggleRealtime = () => setRealtime(!realtime)
 
   return (
     <>
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Stack gap={2} direction={fullWidth ? 'column' : 'row'}>
-            <Button onClick={refresh} variant='contained' size='small' fullWidth={fullWidth} startIcon={<Refresh />}>
-              Refresh Data Klaim
+            <Button
+              onClick={toggleRealtime}
+              variant='contained'
+              size='small'
+              color={realtime ? 'success' : 'error'}
+              fullWidth={fullWidth}
+              startIcon={<Refresh />}
+            >
+              Mode Realtime {realtime ? 'Aktif' : 'Tidak Aktif'}
             </Button>
           </Stack>
         </Grid>
 
         <Grid item xs={12}>
           <Card>
-            <KlaimTable />
+            <KlaimTable realtime={realtime} />
           </Card>
         </Grid>
       </Grid>
