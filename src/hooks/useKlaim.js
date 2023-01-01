@@ -54,11 +54,21 @@ const useProvideKlaim = () => {
     }
   }
 
+  const getThisMonth = async () => {
+    try {
+      const res = await axios.get('/api/klaim')
+
+      return [res.data.data, null]
+    } catch (error) {
+      return [null, error]
+    }
+  }
+
   useEffect(() => {
     refresh()
   }, [])
 
-  return { loading, error, data, refresh, updateStatus }
+  return { loading, error, data, refresh, updateStatus, getThisMonth }
 }
 
 export { ProvideKlaim, useKlaim }

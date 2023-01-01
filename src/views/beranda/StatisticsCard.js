@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -39,7 +40,10 @@ const renderStats = data => {
 }
 
 const StatisticsCard = () => {
-  const { data } = useKlaim()
+  const { getThisMonth } = useKlaim()
+
+  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState([])
 
   const statsValue = {
     complete: 0,
@@ -74,6 +78,38 @@ const StatisticsCard = () => {
       icon: <ChartBar sx={{ fontSize: '1.75rem' }} />
     }
   ]
+
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true)
+      const [newData] = await getThisMonth()
+      setLoading(false)
+
+      if (newData) {
+        setData(newData)
+      }
+    }
+
+    getData()
+  }, [getThisMonth])
+
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true)
+      const [newData] = await getThisMonth()
+      setLoading(false)
+
+      if (newData) {
+        setData(newData)
+      }
+    }
+
+    const loop = setInterval(() => {
+      if (!loading) getData()
+    }, 5000)
+
+    return () => clearInterval(loop)
+  }, [getThisMonth, loading])
 
   return (
     <Card>
