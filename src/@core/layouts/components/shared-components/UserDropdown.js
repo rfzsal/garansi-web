@@ -105,7 +105,7 @@ const UserDropdown = ({ user }) => {
           </Box>
         </Box>
         <Divider sx={{ mt: 0, mb: 1 }} />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pengaturan-akun')}>
           <Box sx={styles}>
             <CogOutline sx={{ marginRight: 2 }} />
             Pengaturan Akun
