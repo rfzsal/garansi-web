@@ -1,7 +1,6 @@
 import Logout from 'mdi-material-ui/Logout'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
-import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import ArchiveOutline from 'mdi-material-ui/ArchiveOutline'
 import FileDocumentOutline from 'mdi-material-ui/FileDocumentOutline'
 import History from 'mdi-material-ui/History'
@@ -33,14 +32,6 @@ const navigation = () => {
       title: 'Riwayat Klaim Garansi',
       icon: History,
       path: '/riwayat-klaim'
-    },
-    {
-      sectionTitle: 'Pengguna'
-    },
-    {
-      title: 'Data Pengguna',
-      icon: AccountPlusOutline,
-      path: '/data-pengguna'
     },
     {
       sectionTitle: 'Akun'
