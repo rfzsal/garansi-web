@@ -55,7 +55,15 @@ const App = props => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
   // Variables
-  const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
+  const getLayout =
+    Component.getLayout ??
+    (page => (
+      <ProvideGaransi>
+        <ProvideKlaim>
+          <UserLayout>{page}</UserLayout>
+        </ProvideKlaim>
+      </ProvideGaransi>
+    ))
 
   return (
     <CacheProvider value={emotionCache}>
@@ -75,11 +83,7 @@ const App = props => {
             return (
               <ThemeComponent settings={settings}>
                 <SnackbarProvider maxSnack={1}>
-                  <ProvideModal>
-                    <ProvideGaransi>
-                      <ProvideKlaim>{getLayout(<Component {...pageProps} />)}</ProvideKlaim>
-                    </ProvideGaransi>
-                  </ProvideModal>
+                  <ProvideModal>{getLayout(<Component {...pageProps} />)}</ProvideModal>
                 </SnackbarProvider>
               </ThemeComponent>
             )
