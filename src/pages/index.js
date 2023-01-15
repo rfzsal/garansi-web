@@ -9,14 +9,15 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import FooterIllustrationsV1 from 'src/views/home/FooterIllustration'
 import { Container } from '@mui/material'
 import { isYesterday } from 'date-fns'
-import { useSnackbar } from 'notistack'
 
 import StatusGaransiTable from 'src/views/klaim-garansi/StatusGaransiTable'
 import RiwayatGaransiTable from 'src/views/klaim-garansi/RiwayatGaransiTable'
 import { coreClient } from 'src/utils/coreClient'
+import { useModal } from 'src/hooks/useModal'
+import KlaimModal from 'src/views/klaim-garansi/modals/KlaimModal'
 
 const Home = () => {
-  const snack = useSnackbar()
+  const { modalOpened, openModal } = useModal()
 
   const [values, setValues] = useState({
     idGaransi: '',
@@ -28,6 +29,20 @@ const Home = () => {
     riwayat: null
   })
 
+  const handleSuccessKlaim = async id => {
+    const util = new coreClient()
+
+    setValues({ ...values, loading: true })
+    const data = await Promise.all([util.getGaransi(id), util.getKlaimGaransi(id)])
+    setValues({ ...values, loading: false })
+
+    if (!data[0][0] || !data[1][0]) {
+      setGaransi({ status: null, riwayat: null })
+    } else {
+      setGaransi({ status: data[0][0], riwayat: data[1][0] })
+    }
+  }
+
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
   }
@@ -37,7 +52,9 @@ const Home = () => {
 
     const util = new coreClient()
 
+    setValues({ ...values, loading: true })
     const data = await Promise.all([util.getGaransi(values.idGaransi), util.getKlaimGaransi(values.idGaransi)])
+    setValues({ ...values, loading: false })
 
     if (!data[0][0] || !data[1][0]) {
       setGaransi({ status: null, riwayat: null })
@@ -46,7 +63,15 @@ const Home = () => {
     }
   }
 
+  const handleKlaimGaransi = async () => {
+    if (values.loading) return
+
+    openModal({ name: 'KlaimModal', data: garansi.status[0].id })
+  }
+
   const disablesClaim = () => {
+    if (values.loading) return true
+
     if (!garansi.riwayat) return false
 
     if (garansi.riwayat.length === 0) return false
@@ -57,8 +82,6 @@ const Home = () => {
 
     return onProgress
   }
-
-  console.log(garansi)
 
   return (
     <>
@@ -112,6 +135,7 @@ const Home = () => {
               {!isYesterday(garansi.status[0].tanggal_akhir) && (
                 <Button
                   disabled={disablesClaim()}
+                  onClick={handleKlaimGaransi}
                   fullWidth
                   size='large'
                   type='submit'
@@ -134,7 +158,7 @@ const Home = () => {
                 </Typography>
               </Box>
               <Box>
-                <RiwayatGaransiTable />
+                <RiwayatGaransiTable data={garansi.riwayat} />
               </Box>
             </CardContent>
           </Card>
@@ -142,6 +166,7 @@ const Home = () => {
       </Container>
 
       <FooterIllustrationsV1 />
+      <KlaimModal open={modalOpened.name === 'KlaimModal'} onSuccess={handleSuccessKlaim} />
     </>
   )
 }

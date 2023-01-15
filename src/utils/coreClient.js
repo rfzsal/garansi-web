@@ -20,6 +20,16 @@ class coreClient {
       return [null, error]
     }
   }
+
+  async addKlaimGaransi(data) {
+    try {
+      await axios.post('/api/klaim/add', data)
+
+      return [true, null]
+    } catch (error) {
+      return [null, error]
+    }
+  }
 }
 
 export { coreClient }
