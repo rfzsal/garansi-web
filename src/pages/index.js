@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -28,6 +28,8 @@ const Home = () => {
     status: null,
     riwayat: null
   })
+
+  const [refreshing, setRefreshing] = useState(false)
 
   const handleSuccessKlaim = async id => {
     const util = new coreClient()
@@ -82,6 +84,39 @@ const Home = () => {
 
     return onProgress
   }
+
+  useEffect(() => {
+    if (refreshing) return
+    if (!garansi.status) return
+    if (garansi.status.length === 0) return
+
+    if (garansi.riwayat) {
+      const onProgress = garansi.riwayat.some(row => {
+        return row.status === 'Dalam proses pengecekan' || row.status === 'Menunggu pengecekan'
+      })
+
+      if (!onProgress) return
+    }
+
+    const refresh = async () => {
+      const util = new coreClient()
+
+      const data = await Promise.all([
+        util.getGaransi(garansi.status[0].id),
+        util.getKlaimGaransi(garansi.status[0].id)
+      ])
+
+      if (!data[0][0] || !data[1][0]) {
+        return
+      } else {
+        setGaransi({ status: data[0][0], riwayat: data[1][0] })
+      }
+    }
+
+    const loop = setInterval(() => refresh(), 5000)
+
+    return () => clearInterval(loop)
+  }, [refreshing, garansi.status])
 
   return (
     <>

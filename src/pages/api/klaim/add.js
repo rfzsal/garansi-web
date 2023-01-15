@@ -13,7 +13,7 @@ const handler = async (req, res) => {
   const [status1, error1] = await query(
     `INSERT INTO data_klaim VALUES('${id}', '${id_garansi}', '${no_telepon}', 'Menunggu pengecekan', '${keterangan}', '${formatDate(
       tanggal_klaim,
-      'yyyy-MM-dd'
+      'yyyy-MM-dd hh:mm:ss'
     )}')`
   )
 

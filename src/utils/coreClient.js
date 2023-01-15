@@ -21,6 +21,16 @@ class coreClient {
     }
   }
 
+  async getRiwayatKlaim(id) {
+    try {
+      const res = await axios.get(`/api/klaim/history?id=${id}`)
+
+      return [res.data.data, null]
+    } catch (error) {
+      return [null, error]
+    }
+  }
+
   async addKlaimGaransi(data) {
     try {
       await axios.post('/api/klaim/add', data)

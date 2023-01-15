@@ -134,7 +134,7 @@ const KlaimTable = ({ realtime }) => {
   }
 
   const handleDetailModal = row => () => {
-    if (row.status === 'Dalam proses pengajuan') {
+    if (row.status === 'Menunggu pengecekan') {
       openModal({ name: 'KlaimConfirmation', data: row })
     } else {
       openModal({ name: 'DetailDataKlaim', data: row })
