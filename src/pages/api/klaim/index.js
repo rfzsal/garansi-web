@@ -6,14 +6,18 @@ const handler = async (req, res) => {
 
   const isAuth = user?.role === 'admin' || user?.role === 'distributor'
 
-  const { from, to } = req.query
+  const { id, from, to } = req.query
 
   let sql = isAuth
     ? 'SELECT data_klaim.id, data_klaim.id_garansi, data_garansi.nama_produk, data_klaim.no_telepon, data_klaim.status, data_klaim.keterangan, UNIX_TIMESTAMP(data_klaim.tanggal_klaim) AS tanggal_klaim, UNIX_TIMESTAMP(data_garansi.tanggal_akhir) AS tanggal_akhir FROM data_klaim INNER JOIN data_garansi ON data_klaim.id_garansi = data_garansi.id'
     : 'SELECT data_klaim.id, data_klaim.id_garansi, data_garansi.nama_produk, data_klaim.status, data_klaim.keterangan, UNIX_TIMESTAMP(data_klaim.tanggal_klaim) AS tanggal_klaim, UNIX_TIMESTAMP(data_garansi.tanggal_akhir) AS tanggal_akhir FROM data_klaim INNER JOIN data_garansi ON data_klaim.id_garansi = data_garansi.id'
 
-  if (from && to) {
-    sql += ` WHERE tanggal_klaim BETWEEN '${from}' AND '${to}'`
+  if (id) {
+    sql += ` WHERE data_klaim.id_garansi='${id}'`
+  } else {
+    if (from && to) {
+      sql += ` WHERE tanggal_klaim BETWEEN '${from}' AND '${to}'`
+    }
   }
 
   const [data, error] = await query(sql)
