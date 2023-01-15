@@ -10,6 +10,16 @@ class coreSession {
       return [null, error]
     }
   }
+
+  async updateUser(username, data) {
+    try {
+      await axios.put(`/api/auth/update?username=${username}`, data)
+
+      return [true, null]
+    } catch (error) {
+      return [null, error]
+    }
+  }
 }
 
 export { coreSession }
