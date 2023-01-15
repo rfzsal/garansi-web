@@ -135,7 +135,7 @@ const KlaimTable = () => {
 
   const isSelected = id => selected.indexOf(id) !== -1
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currentVisibleRow.length) : 0
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   useEffect(() => {
     setFilteredRow(data)
@@ -195,7 +195,7 @@ const KlaimTable = () => {
                 </TableRow>
               )}
 
-              {currentVisibleRow.length === 0 && (
+              {rows.length === 0 && (
                 <TableRow
                   style={{
                     height: 53 * emptyRows
@@ -213,7 +213,7 @@ const KlaimTable = () => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component='div'
-          count={currentVisibleRow.length}
+          count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

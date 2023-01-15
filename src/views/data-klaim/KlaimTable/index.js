@@ -98,19 +98,20 @@ const KlaimTable = ({ realtime }) => {
   const [keyword, setKeyword] = useState('')
   const [filteredRow, setFilteredRow] = useState([])
 
-  const rows = filteredRow.map(row => {
-    return createData(row.id, row.nama_produk, row.id_garansi, row.status, row.tanggal_klaim, row)
-  })
+  const rows = filteredRow
+    .map(row => {
+      return createData(row.id, row.nama_produk, row.id_garansi, row.status, row.tanggal_klaim, row)
+    })
+    .filter(row => {
+      const isSearchFound = row.id.indexOf(keyword) !== -1
+      const isActive = row.status !== 'Klaim ditolak' && row.status !== 'Klaim diterima'
+
+      return isSearchFound && isActive
+    })
 
   const currentVisibleRow = rows
     .sort(getComparator(order, orderBy))
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    .filter(row => {
-      const isActive = row.status !== 'Klaim ditolak' && row.status !== 'Klaim diterima'
-      const isSearchFound = row.id.indexOf(keyword) !== -1
-
-      return isActive && isSearchFound
-    })
 
   const handleSearch = newKeyword => {
     setKeyword(newKeyword)
@@ -143,7 +144,7 @@ const KlaimTable = ({ realtime }) => {
 
   const isSelected = id => selected.indexOf(id) !== -1
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currentVisibleRow.length) : 0
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   useEffect(() => {
     setFilteredRow(data)
@@ -209,7 +210,7 @@ const KlaimTable = ({ realtime }) => {
                 </TableRow>
               )}
 
-              {currentVisibleRow.length === 0 && (
+              {rows.length === 0 && (
                 <TableRow
                   style={{
                     height: 53 * emptyRows
@@ -227,7 +228,7 @@ const KlaimTable = ({ realtime }) => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component='div'
-          count={currentVisibleRow.length}
+          count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
