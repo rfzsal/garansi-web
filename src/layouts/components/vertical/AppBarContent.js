@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
@@ -9,14 +11,27 @@ import Menu from 'mdi-material-ui/Menu'
 // ** Components
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
-import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown'
+import { coreSession } from 'src/utils/coreSession'
 
 const AppBarContent = props => {
+  const [user, setUser] = useState({ username: '', role: '' })
+
   // ** Props
   const { hidden, settings, saveSettings, toggleNavVisibility } = props
 
   // ** Hook
   const hiddenSm = useMediaQuery(theme => theme.breakpoints.down('sm'))
+
+  useEffect(() => {
+    const util = new coreSession()
+
+    util
+      .getSession()
+      .then(([session]) => {
+        setUser(session)
+      })
+      .catch(e => {})
+  }, [])
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -33,7 +48,7 @@ const AppBarContent = props => {
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
         <ModeToggler settings={settings} saveSettings={saveSettings} />
-        <UserDropdown />
+        <UserDropdown user={user} />
       </Box>
     </Box>
   )

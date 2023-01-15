@@ -27,7 +27,7 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
   boxShadow: `0 0 0 2px ${theme.palette.background.paper}`
 }))
 
-const UserDropdown = () => {
+const UserDropdown = ({ user }) => {
   // ** States
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -69,7 +69,7 @@ const UserDropdown = () => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Avatar
-          alt='Cahaya Distribusi'
+          alt={user.username || ''}
           onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
           src='https://i.postimg.cc/2yV3LkV6/download-modified.png'
@@ -91,15 +91,15 @@ const UserDropdown = () => {
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
               <Avatar
-                alt='Cahaya Distribusi'
+                alt={user.username || ''}
                 src='https://i.postimg.cc/2yV3LkV6/download-modified.png'
                 sx={{ width: '2.5rem', height: '2.5rem' }}
               />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 600 }}>Cahaya Distribusi</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{user.username || ''}</Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                Distributor
+                {user.role || ''}
               </Typography>
             </Box>
           </Box>
