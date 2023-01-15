@@ -41,7 +41,10 @@ const KlaimConfirmation = ({ open }) => {
   const handleSave = async () => {
     setLoading(true)
 
-    const [status, error] = await updateStatus(modalOpened.data.id, { status: 'Dalam proses pengecekan' })
+    const [status, error] = await updateStatus(modalOpened.data.id, {
+      status: 'Dalam proses pengecekan',
+      date: Date.now()
+    })
     if (error) return snack.enqueueSnackbar('Terjadi kesalahan', { variant: 'error' })
 
     setLoading(false)

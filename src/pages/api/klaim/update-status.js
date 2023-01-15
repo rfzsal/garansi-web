@@ -1,3 +1,4 @@
+import { formatDate } from 'src/lib/date'
 import { query } from 'src/lib/mysql'
 import { withSessionRoute } from 'src/lib/session'
 
@@ -11,14 +12,17 @@ const handler = async (req, res) => {
 
   if (!req.query.id) return res.status(400).end()
 
-  const { status, details } = req.body
+  const { status, details, date } = req.body
 
   if (!status) return res.status(400).end()
 
   const [queryStatus1, error1] = await query(`UPDATE data_klaim SET status='${status}' WHERE id='${req.query.id}'`)
 
   const [queryStatus2, error2] = await query(
-    `INSERT INTO status_klaim VALUES ('${req.query.id}', '${details || status}', current_timestamp())`
+    `INSERT INTO status_klaim VALUES ('${req.query.id}', '${details || status}', '${formatDate(
+      date,
+      'yyyy-MM-dd hh:mm:ss'
+    )}')`
   )
 
   if (error1 || error2) {

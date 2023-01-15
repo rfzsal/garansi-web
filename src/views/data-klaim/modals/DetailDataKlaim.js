@@ -66,7 +66,8 @@ const DetailKlaimGaransi = ({ open }) => {
 
     const [status, error] = await updateStatus(modalOpened.data.id, {
       status: values.responseStatus,
-      details: values.responseDetail
+      details: values.responseDetail,
+      date: Date.now()
     })
     if (error) return snack.enqueueSnackbar('Terjadi kesalahan', { variant: 'error' })
 
