@@ -4,8 +4,6 @@ import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 
 const TabAccount = ({ user }) => {
-  console.log(user)
-
   return (
     <CardContent>
       <form>
