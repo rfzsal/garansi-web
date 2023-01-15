@@ -11,7 +11,7 @@ import { withSessionSsr } from 'src/lib/session'
 import KlaimTable from 'src/views/data-klaim/KlaimTable'
 
 const DataKlaim = () => {
-  const [realtime, setRealtime] = useState(false)
+  const [realtime, setRealtime] = useState(true)
   const fullWidth = useMediaQuery(theme => theme.breakpoints.down('lg'))
 
   const toggleRealtime = () => setRealtime(!realtime)
