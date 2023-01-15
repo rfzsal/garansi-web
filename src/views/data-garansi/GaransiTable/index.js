@@ -102,7 +102,7 @@ const GaransiTable = () => {
   const handleSearch = keyword => {
     if (keyword.trim() === '') return setFilteredRow(data)
 
-    const newFilteredRow = data.filter(row => row.id.indexOf(keyword) > 0)
+    const newFilteredRow = data.filter(row => row.id.indexOf(keyword) !== -1)
 
     setFilteredRow(newFilteredRow)
   }
