@@ -11,6 +11,7 @@ import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import { styled } from '@mui/material/styles'
 import MuiCard from '@mui/material/Card'
+import Avatar from '@mui/material/Avatar'
 import InputAdornment from '@mui/material/InputAdornment'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
@@ -74,9 +75,7 @@ const Masuk = () => {
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(7, 9, 7)} !important` }}>
           <Box sx={{ mb: 6 }}>
-            <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              CekGaransi 🖥️
-            </Typography>
+            <Avatar alt='Cahaya Distribusi' src='/images/logo.png' sx={{ width: 128, height: 128, mx: 'auto' }} />
           </Box>
 
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
