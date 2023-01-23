@@ -13,10 +13,10 @@ const FooterContent = () => {
       <Typography sx={{ mr: 2 }}>
         {`© ${new Date().getFullYear()}, Made with `}
         <Box component='span' sx={{ color: 'error.main' }}>
-          ❤️
+          🧡
         </Box>
         {` by `}
-        <Link href='#'>Alphabet Incubator</Link>
+        <Link href='#'>Ihsan</Link>
       </Typography>
     </Box>
   )
