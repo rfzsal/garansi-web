@@ -22,7 +22,7 @@ const Beranda = () => {
   useEffect(() => {
     const loop = setTimeout(() => {
       if (!loading) refresh()
-    }, 5000)
+    }, 30000)
 
     return () => clearInterval(loop)
   }, [loading, refresh])
