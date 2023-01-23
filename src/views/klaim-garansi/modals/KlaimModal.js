@@ -47,7 +47,22 @@ const KlaimModal = ({ open, onSuccess }) => {
   }
 
   const handleSave = async () => {
-    if (!values.nomor_telepon || !values.keterangan) return
+    if (!values.nomor_telepon || !values.keterangan)
+      return snack.enqueueSnackbar('Isi semua data dengan benar', { variant: 'warning' })
+
+    const reg = new RegExp('^[0-9]+$')
+
+    if (String(values.nomor_telepon).trim().length < 10)
+      return snack.enqueueSnackbar('Isi Nomor Kontak dengan benar', { variant: 'warning' })
+
+    if (String(values.nomor_telepon).trim().length > 15)
+      return snack.enqueueSnackbar('Isi Nomor Kontak dengan benar', { variant: 'warning' })
+
+    if (!reg.test(values.nomor_telepon))
+      return snack.enqueueSnackbar('Isi Nomor Kontak dengan benar', { variant: 'warning' })
+
+    if (String(values.keterangan).trim().length < 10)
+      return snack.enqueueSnackbar('Isi Keterangan dengan jelas dan detail', { variant: 'warning' })
 
     setLoading(true)
 
