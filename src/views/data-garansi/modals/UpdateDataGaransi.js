@@ -52,6 +52,12 @@ const UpdateDataGaransi = ({ open }) => {
 
   const handleChange = prop => event => {
     if (prop === 'startDate' || prop === 'endDate') {
+      if (prop === 'startDate' && event >= values.endDate)
+        return snack.enqueueSnackbar('Tanggal Mulai harus sebelum Tanggal Akhir', { variant: 'warning' })
+
+      if (prop === 'endDate' && event <= values.startDate)
+        return snack.enqueueSnackbar('Tanggal Akhir harus sesudah Tanggal Mulai', { variant: 'warning' })
+
       setValues({ ...values, [prop]: event })
     } else {
       setValues({ ...values, [prop]: event.target.value })
@@ -66,7 +72,20 @@ const UpdateDataGaransi = ({ open }) => {
   }
 
   const handleSave = async () => {
-    if (!values.productId || !values.productName || !values.startDate || !values.endDate) return
+    if (!values.productId || !values.productName || !values.startDate || !values.endDate)
+      return snack.enqueueSnackbar('Isi semua data dengan benar', { variant: 'warning' })
+
+    if (String(values.productId).trim().length < 10)
+      return snack.enqueueSnackbar('Nomor Seri minimal 10 digit', { variant: 'warning' })
+
+    if (String(values.productId).trim().length > 16)
+      return snack.enqueueSnackbar('Nomor Seri maksimal 16 digit', { variant: 'warning' })
+
+    if (String(values.productName).trim().length < 5)
+      return snack.enqueueSnackbar('Nama Produk minimal 5 karakter', { variant: 'warning' })
+
+    if (String(values.productName).trim().length > 75)
+      return snack.enqueueSnackbar('Nama Produk minimal 75 karakter', { variant: 'warning' })
 
     setLoading(true)
 
