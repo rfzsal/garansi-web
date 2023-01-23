@@ -60,7 +60,11 @@ const DetailKlaimGaransi = ({ open }) => {
   }
 
   const handleSave = async () => {
-    if (!values.responseStatus || !values.responseDetail) return
+    if (!values.responseStatus || !values.responseDetail)
+      return snack.enqueueSnackbar('Isi semua respon klaim dengan benar', { variant: 'warning' })
+
+    if (String(values.responseDetail).trim().length < 10)
+      return snack.enqueueSnackbar('Isi Keterangan dengan jelas dan detail', { variant: 'warning' })
 
     setLoading(true)
 
