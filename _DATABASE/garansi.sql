@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2023 at 06:26 PM
+-- Generation Time: Jan 23, 2023 at 06:42 PM
 -- Server version: 10.4.27-MariaDB
--- PHP Version: 8.1.12
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,7 +46,8 @@ CREATE TABLE `data_klaim` (
   `no_telepon` varchar(15) NOT NULL,
   `status` varchar(25) NOT NULL DEFAULT 'Dalam proses pengajuan',
   `keterangan` varchar(255) NOT NULL,
-  `tanggal_klaim` datetime NOT NULL
+  `tanggal_klaim` datetime NOT NULL,
+  `gambar` mediumblob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
@@ -66,7 +67,7 @@ CREATE TABLE `data_pengguna` (
 --
 
 INSERT INTO `data_pengguna` (`username`, `password`, `role`) VALUES
-('admin', '$2b$10$bnn6NIzuz7.aRyG1BPMR1OImpe3McVIjAldSPdQsgkRb/7pZ.bXce', 'admin');
+('admin', '$2b$10$SLuvW5K059PjjKxD5UMlGOa47g2J000jOSgL2l3yqgw5Iz4VNafHy', 'admin');
 
 -- --------------------------------------------------------
 
