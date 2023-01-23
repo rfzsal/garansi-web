@@ -33,7 +33,11 @@ class coreClient {
 
   async addKlaimGaransi(data) {
     try {
-      await axios.post('/api/klaim/add', data)
+      await axios.post('/api/klaim/add', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
 
       return [true, null]
     } catch (error) {

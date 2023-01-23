@@ -12,10 +12,17 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
+import { styled } from '@mui/material/styles'
 import { formatDate } from 'src/lib/date'
 
 import { useModal } from 'src/hooks/useModal'
 import { useKlaim } from 'src/hooks/useKlaim'
+
+const ImgStyled = styled('img')(({ theme }) => ({
+  height: 240,
+  display: 'block',
+  margin: '0 auto'
+}))
 
 const DetailKlaimGaransi = ({ open }) => {
   const snack = useSnackbar()
@@ -33,6 +40,7 @@ const DetailKlaimGaransi = ({ open }) => {
     phoneNumber: '',
     detail: '',
     status: '',
+    image: '',
     responseStatus: '',
     responseDetail: ''
   })
@@ -53,6 +61,7 @@ const DetailKlaimGaransi = ({ open }) => {
       phoneNumber: '',
       detail: '',
       status: '',
+      image: '',
       responseStatus: '',
       responseDetail: ''
     })
@@ -84,6 +93,9 @@ const DetailKlaimGaransi = ({ open }) => {
   useEffect(() => {
     if (modalOpened.name !== 'DetailDataKlaim') return
 
+    const image = modalOpened.data.gambar
+    const bufferImage = Buffer.from(image, 'base64')
+
     setValues({
       id: modalOpened.data.id,
       name: modalOpened.data.name,
@@ -93,6 +105,7 @@ const DetailKlaimGaransi = ({ open }) => {
       phoneNumber: modalOpened.data.no_telepon,
       detail: modalOpened.data.keterangan,
       status: modalOpened.data.status,
+      image: `data:image/png;base64,${bufferImage}`,
       responseStatus: '',
       responseDetail: ''
     })
@@ -117,6 +130,10 @@ const DetailKlaimGaransi = ({ open }) => {
           <TextField disabled={loading} margin='normal' value={values.status} label='Status' fullWidth />
 
           <TextField disabled={loading} margin='normal' value={values.detail} label='Keterangan' multiline fullWidth />
+
+          <Box sx={{ p: 4, my: 4, backgroundColor: 'grey.200', borderRadius: 1 }}>
+            <ImgStyled alt='gambar' src={values.image} />
+          </Box>
 
           <TextField disabled={loading} margin='normal' value={values.phoneNumber} label='Kontak Pengguna' fullWidth />
 

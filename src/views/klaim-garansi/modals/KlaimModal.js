@@ -34,20 +34,29 @@ const KlaimModal = ({ open, onSuccess }) => {
     nomor_telepon: '',
     keterangan: ''
   })
+  const [image, setImage] = useState('')
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
+  }
+
+  const handleImageChange = file => {
+    if (!file.target.files[0]) return
+
+    if (file.target.files[0].size > 750000) return snack.enqueueSnackbar('File maksimal 750kb', { variant: 'warning' })
+    setImage(file.target.files[0])
   }
 
   const handleCloseModal = () => {
     if (loading) return
 
     setValues({ nomor_telepon: '', keterangan: '' })
+    setImage('')
     closeModal()
   }
 
   const handleSave = async () => {
-    if (!values.nomor_telepon || !values.keterangan)
+    if (!values.nomor_telepon || !values.keterangan || !image)
       return snack.enqueueSnackbar('Isi semua data dengan benar', { variant: 'warning' })
 
     const reg = new RegExp('^[0-9]+$')
@@ -68,13 +77,14 @@ const KlaimModal = ({ open, onSuccess }) => {
 
     const util = new coreClient()
 
-    const data = {
-      id_garansi: modalOpened.data,
-      no_telepon: values.nomor_telepon,
-      keterangan: values.keterangan,
-      tanggal_klaim: Date.now()
-    }
-    const [status, error] = await util.addKlaimGaransi(data)
+    const formData = new FormData()
+    formData.append('id_garansi', modalOpened.data)
+    formData.append('no_telepon', values.nomor_telepon)
+    formData.append('keterangan', values.keterangan)
+    formData.append('tanggal_klaim', Date.now())
+    formData.append('gambar', image)
+
+    const [status, error] = await util.addKlaimGaransi(formData)
     onSuccess(modalOpened.data)
 
     setLoading(false)
@@ -128,6 +138,15 @@ const KlaimModal = ({ open, onSuccess }) => {
                 fullWidth
                 multiline
               />
+
+              <TextField label='Gambar' disabled margin='normal' value={image?.name || ''} fullWidth />
+
+              <Box sx={{ mb: 4 }}>
+                <Button component='label'>
+                  Upload Gambar
+                  <input onChange={handleImageChange} hidden accept='image/*' multiple type='file' />
+                </Button>
+              </Box>
             </Box>
 
             <Stack direction='row' justifyContent='flex-end' alignItems='center' spacing={2} marginTop={2}>
