@@ -155,7 +155,7 @@ const KlaimTable = ({ realtime }) => {
 
     const loop = setInterval(() => {
       if (!loading) refresh()
-    }, 5000)
+    }, 15000)
 
     return () => clearInterval(loop)
   }, [loading, refresh, realtime])

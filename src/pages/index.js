@@ -113,7 +113,7 @@ const Home = () => {
       }
     }
 
-    const loop = setInterval(() => refresh(), 5000)
+    const loop = setInterval(() => refresh(), 15000)
 
     return () => clearInterval(loop)
   }, [refreshing, garansi.status])
