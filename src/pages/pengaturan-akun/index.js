@@ -73,7 +73,7 @@ const PengaturanAkun = ({ user }) => {
           <TabAccount user={user} />
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='security'>
-          <TabSecurity />
+          <TabSecurity user={user} />
         </TabPanel>
       </TabContext>
     </Card>

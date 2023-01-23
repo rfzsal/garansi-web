@@ -1,5 +1,4 @@
-import { useState } from 'react'
-
+import { useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import InputLabel from '@mui/material/InputLabel'
@@ -8,11 +7,18 @@ import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
+import { useRouter } from 'next/router'
+import { useSnackbar } from 'notistack'
 
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
-const TabSecurity = () => {
+import { coreSession } from 'src/utils/coreSession'
+
+const TabSecurity = ({ user }) => {
+  const snack = useSnackbar()
+  const router = useRouter()
+
   const [values, setValues] = useState({
     newPassword: '',
     currentPassword: '',
@@ -21,6 +27,8 @@ const TabSecurity = () => {
     showCurrentPassword: false,
     showConfirmNewPassword: false
   })
+  const [username, setUsername] = useState('')
+  const [loading, setLoading] = useState(true)
 
   const handleCurrentPasswordChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -58,6 +66,41 @@ const TabSecurity = () => {
     event.preventDefault()
   }
 
+  const handleSave = async () => {
+    if (loading) return
+
+    if (!values.currentPassword || !values.newPassword || !values.confirmNewPassword)
+      return snack.enqueueSnackbar('Isi semua data dengan benar', { variant: 'warning' })
+
+    if (!values.newPassword) return snack.enqueueSnackbar('Isi Kata Sandi Baru dengan benar', { variant: 'warning' })
+
+    if (values.confirmNewPassword !== values.newPassword)
+      return snack.enqueueSnackbar('Konfirmasi Kata Sandi tidak sesuai', { variant: 'warning' })
+
+    if (!values.currentPassword) return snack.enqueueSnackbar('Isi Kata Sandi dengan benar', { variant: 'warning' })
+
+    const util = new coreSession()
+
+    setLoading(true)
+
+    const [status, error] = await util.updateUser(username, {
+      password: values.currentPassword,
+      newPassword: values.newPassword
+    })
+
+    setLoading(false)
+
+    if (error) return snack.enqueueSnackbar('Perbarui akun gagal', { variant: 'error' })
+
+    snack.enqueueSnackbar('Perbarui akun berhasil', { variant: 'success' })
+    router.reload()
+  }
+
+  useEffect(() => {
+    setLoading(false)
+    setUsername(user.username)
+  }, [user])
+
   return (
     <form>
       <CardContent sx={{ paddingBottom: 0 }}>
@@ -66,6 +109,7 @@ const TabSecurity = () => {
             <FormControl fullWidth>
               <InputLabel>Kata Sandi Saat Ini</InputLabel>
               <OutlinedInput
+                disabled={loading}
                 label='Kata Sandi Saat Ini'
                 value={values.currentPassword}
                 type={values.showCurrentPassword ? 'text' : 'password'}
@@ -73,6 +117,7 @@ const TabSecurity = () => {
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
+                      disabled={loading}
                       edge='end'
                       onClick={handleClickShowCurrentPassword}
                       onMouseDown={handleMouseDownCurrentPassword}
@@ -89,6 +134,7 @@ const TabSecurity = () => {
             <FormControl fullWidth>
               <InputLabel>Kata Sandi Baru</InputLabel>
               <OutlinedInput
+                disabled={loading}
                 label='Kata Sandi Baru'
                 value={values.newPassword}
                 onChange={handleNewPasswordChange('newPassword')}
@@ -96,6 +142,7 @@ const TabSecurity = () => {
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
+                      disabled={loading}
                       edge='end'
                       onClick={handleClickShowNewPassword}
                       onMouseDown={handleMouseDownNewPassword}
@@ -112,6 +159,7 @@ const TabSecurity = () => {
             <FormControl fullWidth>
               <InputLabel>Konfirmasi Kata Sandi</InputLabel>
               <OutlinedInput
+                disabled={loading}
                 label='Konfirmasi Kata Sandi'
                 value={values.confirmNewPassword}
                 type={values.showConfirmNewPassword ? 'text' : 'password'}
@@ -119,6 +167,7 @@ const TabSecurity = () => {
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
+                      disabled={loading}
                       edge='end'
                       onClick={handleClickShowConfirmNewPassword}
                       onMouseDown={handleMouseDownConfirmNewPassword}
@@ -132,10 +181,11 @@ const TabSecurity = () => {
           </Grid>
 
           <Grid item xs={12}>
-            <Button variant='contained' sx={{ marginRight: 3.5 }}>
+            <Button disabled={loading} onClick={handleSave} variant='contained' sx={{ marginRight: 3.5 }}>
               Simpan
             </Button>
             <Button
+              disabled={loading}
               type='reset'
               variant='outlined'
               color='secondary'
