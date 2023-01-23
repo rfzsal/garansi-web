@@ -21,7 +21,6 @@ const handler = async (req, res) => {
   const [status, error] = await query(`DELETE FROM data_garansi WHERE id IN (${inValues})`)
 
   if (error) {
-    console.log(error)
     res.status(500).send({ error })
   } else {
     res.status(200).send({ status })
