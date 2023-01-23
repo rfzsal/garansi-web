@@ -53,7 +53,8 @@ const Masuk = () => {
   }
 
   const handleLogin = () => {
-    if (!values.username || !values.password) return
+    if (!values.username || !values.password)
+      return snack.enqueueSnackbar('Isi Nama User dan Kata Sandi dengan benar', { variant: 'warning' })
 
     setValues({ ...values, loading: true })
 
