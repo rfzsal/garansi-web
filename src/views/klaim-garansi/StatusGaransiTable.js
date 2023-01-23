@@ -5,7 +5,7 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
-import { isYesterday } from 'date-fns'
+import { endOfDay, isBefore, startOfDay } from 'date-fns'
 
 import { formatDate } from 'src/lib/date'
 
@@ -49,7 +49,9 @@ const StatusGaransiTable = ({ data }) => {
               <TableCell>{row.name}</TableCell>
               <TableCell align='center'>{formatDate(row.startDate)}</TableCell>
               <TableCell align='center'>{formatDate(row.endDate)}</TableCell>
-              <TableCell align='center'>{isYesterday(row.endDate) ? 'Kadaluarsa' : 'Aktif'}</TableCell>
+              <TableCell align='center'>
+                {isBefore(endOfDay(row.endDate), startOfDay(Date.now())) ? 'Kadaluarsa' : 'Aktif'}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

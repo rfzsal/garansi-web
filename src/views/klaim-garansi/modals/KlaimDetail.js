@@ -6,6 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
 import Timeline from '@mui/lab/Timeline'
 import TimelineItem from '@mui/lab/TimelineItem'
 import TimelineSeparator from '@mui/lab/TimelineSeparator'
@@ -112,6 +113,13 @@ const KlaimDetail = ({ open }) => {
                 <TextField margin='normal' value={riwayat[0].status} label='Status' fullWidth />
 
                 <TextField margin='normal' value={riwayat[0].keterangan} label='Keterangan' fullWidth multiline />
+
+                <Typography sx={{ px: 1, mt: 2 }} variant='body2'>
+                  *Kami akan segera menghubungi anda melalui kontak yang diberikan
+                </Typography>
+                <Typography sx={{ px: 1, mt: 1 }} variant='body2'>
+                  **Jika ada kendala silahkan hubungi kami melalui kontak yang tersedia
+                </Typography>
               </>
             )}
           </Box>

@@ -3,12 +3,13 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import Avatar from '@mui/material/Avatar'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 import FooterIllustrationsV1 from 'src/views/home/FooterIllustration'
 import { Container } from '@mui/material'
-import { isYesterday } from 'date-fns'
+import { isBefore, endOfDay, startOfDay } from 'date-fns'
 
 import StatusGaransiTable from 'src/views/klaim-garansi/StatusGaransiTable'
 import RiwayatGaransiTable from 'src/views/klaim-garansi/RiwayatGaransiTable'
@@ -116,12 +117,27 @@ const Home = () => {
     const loop = setInterval(() => refresh(), 15000)
 
     return () => clearInterval(loop)
-  }, [refreshing, garansi.status])
+  }, [refreshing, garansi.status, garansi.riwayat])
 
   return (
     <>
       <Container maxWidth='md' sx={{ py: 10 }}>
+        <Box sx={{ mb: 6 }}>
+          <Avatar alt='Cahaya Distribusi' src='/images/logo.png' sx={{ width: 128, height: 128, mx: 'auto' }} />
+        </Box>
+
         <Card sx={{ zIndex: 1 }}>
+          <CardContent sx={{ padding: theme => `${theme.spacing(7, 7, 0)} !important` }}>
+            <Box sx={{ mb: 6 }}>
+              <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
+                PT CAHAYA DISTRIBUSI
+              </Typography>
+              <Typography variant='body1'>Kontak Distributor : (021) 62318113</Typography>
+            </Box>
+          </CardContent>
+        </Card>
+
+        <Card sx={{ mt: 5, zIndex: 1 }}>
           <CardContent sx={{ padding: theme => `${theme.spacing(7, 7, 7)} !important` }}>
             <Box sx={{ mb: 6 }}>
               <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
@@ -167,7 +183,7 @@ const Home = () => {
                 <StatusGaransiTable data={garansi.status} />
               </Box>
 
-              {!isYesterday(garansi.status[0].tanggal_akhir) && (
+              {!isBefore(endOfDay(garansi.status[0].tanggal_akhir * 1000), startOfDay(Date.now())) && (
                 <Button
                   disabled={disablesClaim()}
                   onClick={handleKlaimGaransi}
