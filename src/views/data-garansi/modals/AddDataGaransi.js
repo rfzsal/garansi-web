@@ -52,11 +52,17 @@ const AddDataGaransi = ({ open }) => {
 
   const handleChange = prop => event => {
     if (prop === 'startDate' || prop === 'endDate') {
-      if (prop === 'startDate' && event >= values.endDate)
-        return snack.enqueueSnackbar('Tanggal Mulai harus sebelum Tanggal Akhir', { variant: 'warning' })
+      if (prop === 'startDate' && event >= values.endDate) {
+        if (values.endDate) {
+          return snack.enqueueSnackbar('Tanggal Mulai harus sebelum Tanggal Akhir', { variant: 'warning' })
+        }
+      }
 
-      if (prop === 'endDate' && event <= values.startDate)
-        return snack.enqueueSnackbar('Tanggal Akhir harus sesudah Tanggal Mulai', { variant: 'warning' })
+      if (prop === 'endDate' && event <= values.startDate) {
+        if (values.startDate) {
+          return snack.enqueueSnackbar('Tanggal Akhir harus sesudah Tanggal Mulai', { variant: 'warning' })
+        }
+      }
 
       setValues({ ...values, [prop]: event })
     } else {
