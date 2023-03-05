@@ -52,6 +52,25 @@ const ImportDataGaransi = ({ open }) => {
     setLoading(true)
 
     const [data] = await readFile(file)
+
+    let dateError = false
+    if (data) {
+      data.forEach(row => {
+        if (row.tanggal_mulai >= row.tanggal_akhir) {
+          if (dateError) return
+          dateError = row.id
+        }
+      })
+    }
+
+    if (dateError) {
+      setLoading(false)
+
+      return snack.enqueueSnackbar(`Tanggal Mulai harus sebelum Tanggal Akhir (ID ${dateError})`, {
+        variant: 'warning'
+      })
+    }
+
     const [status, error] = await importData(data)
 
     setLoading(false)
