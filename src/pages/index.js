@@ -9,6 +9,7 @@ import Card from '@mui/material/Card'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 import FooterIllustrationsV1 from 'src/views/home/FooterIllustration'
 import { Container } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import { isBefore, endOfDay, startOfDay } from 'date-fns'
 import { useSnackbar } from 'notistack'
 
@@ -17,6 +18,12 @@ import RiwayatGaransiTable from 'src/views/klaim-garansi/RiwayatGaransiTable'
 import { coreClient } from 'src/utils/coreClient'
 import { useModal } from 'src/hooks/useModal'
 import KlaimModal from 'src/views/klaim-garansi/modals/KlaimModal'
+
+const ImgStyled = styled('img')(({ theme }) => ({
+  width: '50%',
+  display: 'block',
+  margin: '0 auto'
+}))
 
 const Home = () => {
   const snack = useSnackbar()
@@ -136,18 +143,55 @@ const Home = () => {
               <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
                 PT CAHAYA DISTRIBUSI
               </Typography>
-              <Typography variant='body1'>Kontak Distributor : (021) 62318113</Typography>
+              <Typography variant='body1'>Kontak Distributor</Typography>
+              <Typography variant='body2' mb={2}>
+                (021) 62318113
+              </Typography>
+
+              <Typography variant='body1'>Facebook</Typography>
+              <Typography variant='body2' mb={2}>
+                <a
+                  href='https://web.facebook.com/cahaya.distribusi/?locale=id_ID&_rdc=1&_rdr'
+                  target='_blank'
+                  rel='noreferrer'
+                >
+                  PT. Cahaya Distribusi Nusantara
+                </a>
+              </Typography>
+
+              <Typography variant='body1'>Instagram</Typography>
+              <Typography variant='body2' mb={2}>
+                <a href='https://www.instagram.com/cahaya_distribusi/?hl=en' target='_blank' rel='noreferrer'>
+                  @cahaya_distribusi
+                </a>
+              </Typography>
+
+              <Typography variant='body1'>Alamat Distributor </Typography>
+              <Typography variant='body2'>
+                <a
+                  href='https://www.google.com/maps/place/PT.Cahaya+Distribusi+Nusantara/@-6.1372922,106.8234937,15z/data=!4m6!3m5!1s0x2e69f5ff32c2eefd:0xf8ea7614c4960d77!8m2!3d-6.1372922!4d106.8234937!16s%2Fg%2F11h9rdvswt'
+                  target='_blank'
+                  rel='noreferrer'
+                >
+                  Mangga Dua Mall Ruko No. 29. Jalan Arteri, Jl Mangga Dua Raya, RT 1 Rw 12, Ancol, Sawah Besar, Jakarta
+                  Pusat
+                </a>
+              </Typography>
             </Box>
           </CardContent>
         </Card>
 
         <Card sx={{ mt: 5, zIndex: 1 }}>
           <CardContent sx={{ padding: theme => `${theme.spacing(7, 7, 7)} !important` }}>
-            <Box sx={{ mb: 6 }}>
+            <Box sx={{ mb: 3 }}>
               <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
                 Cek Status Garansi 🔎
               </Typography>
-              <Typography variant='body2'>Cek status garansi dengan nomor komponen</Typography>
+              <Typography variant='body2'>Cek status garansi dengan nomor komponen. Contoh:</Typography>
+            </Box>
+
+            <Box sx={{ mb: 6 }}>
+              <ImgStyled alt='gambar' src='https://i.postimg.cc/xj6mvDQ2/f5e60455-ca4c-43f6-9952-c2c8eeb3586b.png' />
             </Box>
 
             <TextField
