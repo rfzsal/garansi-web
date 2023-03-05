@@ -12,7 +12,7 @@ import { formatDate } from 'src/lib/date'
 import { useModal } from 'src/hooks/useModal'
 
 const ImgStyled = styled('img')(({ theme }) => ({
-  height: 240,
+  width: '50%',
   display: 'block',
   margin: '0 auto'
 }))

@@ -19,7 +19,7 @@ import { useModal } from 'src/hooks/useModal'
 import { useKlaim } from 'src/hooks/useKlaim'
 
 const ImgStyled = styled('img')(({ theme }) => ({
-  height: 240,
+  width: '50%',
   display: 'block',
   margin: '0 auto'
 }))
