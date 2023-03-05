@@ -10,6 +10,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import FooterIllustrationsV1 from 'src/views/home/FooterIllustration'
 import { Container } from '@mui/material'
 import { isBefore, endOfDay, startOfDay } from 'date-fns'
+import { useSnackbar } from 'notistack'
 
 import StatusGaransiTable from 'src/views/klaim-garansi/StatusGaransiTable'
 import RiwayatGaransiTable from 'src/views/klaim-garansi/RiwayatGaransiTable'
@@ -18,6 +19,8 @@ import { useModal } from 'src/hooks/useModal'
 import KlaimModal from 'src/views/klaim-garansi/modals/KlaimModal'
 
 const Home = () => {
+  const snack = useSnackbar()
+
   const { modalOpened, openModal } = useModal()
 
   const [values, setValues] = useState({
@@ -59,8 +62,9 @@ const Home = () => {
     const data = await Promise.all([util.getGaransi(values.idGaransi), util.getKlaimGaransi(values.idGaransi)])
     setValues({ ...values, loading: false })
 
-    if (!data[0][0] || !data[1][0]) {
+    if (data[0][0]?.length === 0 || !data[1][0]?.length === 0) {
       setGaransi({ status: null, riwayat: null })
+      snack.enqueueSnackbar('Data garansi tidak ditemukan', { variant: 'warning' })
     } else {
       setGaransi({ status: data[0][0], riwayat: data[1][0] })
     }
