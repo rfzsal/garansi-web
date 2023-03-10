@@ -56,6 +56,9 @@ const Masuk = () => {
     if (!values.username || !values.password)
       return snack.enqueueSnackbar('Isi Nama User dan Kata Sandi dengan benar', { variant: 'warning' })
 
+    if (values.password.length > 10)
+      return snack.enqueueSnackbar('Password maksimal 10 karakter', { variant: 'warning' })
+
     setValues({ ...values, loading: true })
 
     axios
