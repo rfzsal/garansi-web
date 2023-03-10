@@ -1,4 +1,3 @@
-import { hash } from 'bcrypt'
 import { signIn } from 'src/lib/auth'
 import { query } from 'src/lib/mysql'
 import { withSessionRoute } from 'src/lib/session'
@@ -39,10 +38,8 @@ const handler = async (req, res) => {
     const user = await signIn(req.query.username, password)
     if (!user) return res.status(401).send(false)
 
-    const hashedPassword = await hash(newPassword, 10)
-
     const [status, error] = await query(
-      `UPDATE data_pengguna SET password='${hashedPassword}' WHERE username='${req.query.username}'`
+      `UPDATE data_pengguna SET password='${newPassword}' WHERE username='${req.query.username}'`
     )
 
     if (error) {
